@@ -70,7 +70,7 @@ classdef NE
     
     function [Adj, W, thresh] = randTopology(size)
     %creates a random adjacency matrix
-    Adj = randi([0 1],size,size);
+    Adj =  zeros(size,size)%randi([0 1],size,size);
     for i = 1:size;
     Adj(i,i) = 0;
     end
@@ -102,10 +102,10 @@ classdef NE
     newAdj = Adj;
     newWeights = weights ;
     newThresh = thresh;
-    [newWeights, newAdj, newThresh] = neuronCountMutation(newAdj, newWeights ,newThresh, minSize);
-    newAdj = connectivityMutation(newAdj);
-    newWeights = weightMutation(newWeights);
-    newThresh = thresholdMutation(newThresh);
+    [newWeights, newAdj, newThresh] = NE.neuronCountMutation(newAdj, newWeights ,newThresh, minSize);
+    newAdj = NE.connectivityMutation(newAdj);
+    newWeights = NE.weightMutation(newWeights);
+    newThresh = NE.thresholdMutation(newThresh);
     end
     
     
@@ -170,7 +170,7 @@ classdef NE
     %utility functions
     
     function combined = combine(outputs, inputs)
-    outputs = outputs(1,size(inputs,2))
+    outputs = outputs(1,size(inputs,2));
     combined = outputs | inputs | [1  zeros(1, size(inputs,2)-1)];
     
     end
