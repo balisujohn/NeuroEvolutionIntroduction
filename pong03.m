@@ -198,9 +198,9 @@ paddle2 = [];
     paddle2 = [PADDLE(1,:)+ PLOT_W - PADDLE_SPACE - PADDLE_W; ...
       PADDLE(2,:)+((PLOT_H - PADDLE_H)/2)];
     resetGame;
-    if ~quitGame; %incase we try to quit from winner message
-      pauseGame([MESSAGE_INTRO, MESSAGE_CONTROLS]);
-    end
+    %if ~quitGame; %incase we try to quit from winner message
+    %  pauseGame([MESSAGE_INTRO, MESSAGE_CONTROLS]);
+    %end
   end
 %------------resetGame------------
 %resets ball location speed and direction
@@ -217,10 +217,10 @@ paddle2 = [];
       score(1), MAX_POINTS, score(2), MAX_POINTS);
     t = title(titleStr, 'Color', TITLE_COLOR);
     set(t, 'FontName', 'Courier','FontSize', 15, 'FontWeight', 'Bold');
-    refreshPlot;
-    if ~quitGame; %make sure we don't wait to quit if use hit 'q'
-      pause(START_DELAY);
-    end
+    %refreshPlot;
+    %if ~quitGame; %make sure we don't wait to quit if use hit 'q'
+     % pause(START_DELAY);
+    %end
   end
 %------------moveBall------------
 %calculates new ball location
@@ -362,11 +362,11 @@ paddle2 = [];
     end
     
     if goal %a goal was made
-      pause(START_DELAY);
+      %pause(START_DELAY);
       resetGame;
       if winner > 0 %somebody won
-        pauseGame(['      PLAYER ' num2str(winner) ' IS THE WINNER!!!' 10])
-        newGame;
+        %pauseGame(['      PLAYER ' num2str(winner) ' IS THE WINNER!!!' 10])
+       % newGame;
       else %nobody won
       end
     end
@@ -392,7 +392,7 @@ paddle2 = [];
       set(h, 'FontSize',5,'FontName','Courier','LineStyle','-','LineWidth',1);
       pause(FRAME_DELAY)
       delete(h);
-    end
+   end
   end
 %------------unpauseGame------------
 %sets paused to false
@@ -468,45 +468,91 @@ paddle2 = [];
     end
   end
 %----------------------MAIN SCRIPT----------------------
-createFigure;
-newGame;
-while ~quitGame
+% createFigure;
+% newGame;
+% while ~quitGame
+%     
+%   ballxd = ballX
+%   ballyd = ballY
+%   ballvect = ballSpeed * ballVector
+%   ballXVel = ballvect(1,1)
+%   ballYvel = ballvect(1,2)
+%   pad1y = paddle1(2,2) - paddle1(2,3)
+%   pad2y = paddle2(2,2) - paddle2(2,3)
+%   
+%   moveBall;
+%   movePaddles;
+%   refreshPlot;
+%   checkGoal;
+% end
+% close(fig);
+% end
+%-------------------------ALT MAIN---------------------
+ createFigure;
+
+[bestAdj, bestW, bestThresh] = NE.randTopology(64);
+while 1
+[mAdj, mW, mThresh] = NE.randTopology(64);
+ newGame;
+ 
+ p1Output =  zeros(1,62)
+ p2Output =  zeros(1,62)
+ while winner == 0
+ %feed brains world state and extract actuation
+ 
+ %initializing empty brain inputs with bias bit
+ p1Input = [1];
+ p2Input = [1];
+ %collecting and processing values from the runtime to feed to the networks
+  ballXPos = ballX;
+  ballYPos = ballY;
+  ballVect = ballSpeed * ballVector;
+  ballXVel = ballVect(1,1);
+  ballYVel = ballVect(1,2);
+  pad1Y = paddle1(2,2) - paddle1(2,3);
+  pad2Y = paddle2(2,2) - paddle2(2,3);
+    if ballXVel > 0
+        p1XVelSign = 1;
+        p2XVelSign = 0;
+    else
+        p1XVelSign = 0;
+        p2XVelSign = 1;
+    end
+  P1BallXPosActivation = NE.valToActivation(ballXPos, 0, 140);
+  P2BallXPosActivation = NE.valToActivation(140- ballXPos, 0, 140);
+  ballYPosActivation = NE.valToActivation(ballYPos, 0, 100);
+  ballXVelActivation = NE.valToActivation(abs(ballYVel), 0, 3);
+  ballYVelActivation = NE.valToActivation(abs(ballYVel), 0, 3);
+  p1YPosActivation = NE.valToActivation(pad1Y, 9,91);
+  p2YPosActivation = NE.valToActivation(pad2Y, 9,91);
+  p1Input = [p1Input P1BallXPosActivation ballYPosActivation p1XVelSign ];
+  p1Input = [p1Input ballXVelActivation ballYVelActivation p1YPosActivation p2YPosActivation]
+  p1Input = NE.combine(p1Output, p1Input)
+  p2Input = [p2Input P2BallXPosActivation ballYPosActivation p2XVelSign ];
+  p2Input = [p2Input ballXVelActivation ballYVelActivation p2YPosActivation p1YPosActivation]
+  p2Input = NE.combine(p2Output, p2Input)
+
+
+  p1Output = NE.advance(bestAdj, bestW, p1Input, bestThresh)'
+  p2Output = NE.advance(mAdj, mW, p2Input, mThresh)'
+ 
+  p1Decision = p1Output(1,63:64)
+  p2Decision = p2Output(1,63:64)
+ 
+  paddle1V = p1Decision(1,1) - p1Decision(1,2)
+  paddle2V = p2Decision(1,1) - p2Decision(1,2)
+
+  
   moveBall;
   movePaddles;
-  refreshPlot;
   checkGoal;
-end
-close(fig);
-end
+   refreshPlot;
+ %if winner == 2;
+ %bestAdj = mAdj;
+ %bestW = mW;
+ %bestThresh = mThresh;
+ end
+ 
 
-% [bestAdj, bestW, bestThresh] = NE.randTopology()
-% while 1
-% [mAdk, mW, mThresh] = NE.randTopology()
-%  newGame;
-%  while winner == 0
-%  %feed brains world state and extract actuation
-%  
-%  %initializing empty brain inputs with bias bit
-%  brain1input = [1]
-%  brain2input = [1]
-%  %translating ball y speed to 10 bits
-%  ballYSpeedInput = [ballY]
- 
- 
-%  
-%  
-%  
-%  moveBall;
-%  movePaddles;
-%  checkGoal;
-%  if winner == 2;
-%  bestAdj = mAdj;
-%  bestW = mW;
-%  bestThresh = mThresh;
-%  end
-%  
-%  end
-%  
-%     
-% 
-% end
+ end
+end

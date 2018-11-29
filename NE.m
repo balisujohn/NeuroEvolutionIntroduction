@@ -64,11 +64,7 @@ classdef NE
     
     end
     
-    function lol = pendulum()
-    open_system(fullfile(matlabroot,'examples','control_featured','rct_pendulum.slx'))
-
-    lol = 1 
-    end
+   
 
     %runtime functions
     
@@ -174,13 +170,26 @@ classdef NE
     %utility functions
     
     function combined = combine(outputs, inputs)
+    outputs = outputs(1,size(inputs,2))
     combined = outputs | inputs | [1  zeros(1, size(inputs,2)-1)];
     
     end
     
-    end
-end
+    function activation = valToActivation(val, lower, upper)
+        percent = (val - lower)/ (upper - lower );
+        activation = [];
+        for i = 1:10
+        if percent * 10 >= i
+        activation = [activation 1];
+        else 
+            activation = [activation 0];
+        end
+        end
     
+    end
+    end
+
+end
     
     
     
