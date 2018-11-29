@@ -1,7 +1,7 @@
 
    
-[Adj, w, thresh] = xorTest()
-
+classdef NE
+    methods(Static)
 
     %learningFunctions
     function [Adj, W, thresh] = xorTest()
@@ -9,7 +9,7 @@
     [Adj, W, thresh] = randTopology(20);
     score = 0;
     bestScore = 0
-    while score < 4;
+    while score < 4
         score = 0;
         
         [mAdj,mW,mThresh] = mutate(Adj,W,thresh,20);
@@ -41,8 +41,8 @@
         end
         
         for c = 1:size(goalOutput,2)
-            obs = observedOutput';
-            goal = goalOutput;
+           % obs = observedOutput';
+            %goal = goalOutput;
          if goalOutput(1,c) >= 0 && (goalOutput(1,c) == observedOutput(c,1))
             score = score +1 ;
          end
@@ -62,6 +62,12 @@
     
     result = bestScore;
     
+    end
+    
+    function lol = pendulum()
+    open_system(fullfile(matlabroot,'examples','control_featured','rct_pendulum.slx'))
+
+    lol = 1 
     end
 
     %runtime functions
@@ -172,7 +178,8 @@
     
     end
     
-    
+    end
+end
     
     
     
