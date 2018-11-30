@@ -103,7 +103,7 @@ classdef NE
     newWeights = weights ;
     newThresh = thresh;
     [newWeights, newAdj, newThresh] = NE.neuronCountMutation(newAdj, newWeights ,newThresh, minSize);
-    newAdj = NE.connectivityMutation(newAdj);
+    [newAdj,newWeights] = NE.connectivityMutation(newAdj,newWeights);
     newWeights = NE.weightMutation(newWeights);
     newThresh = NE.thresholdMutation(newThresh);
     end
@@ -111,7 +111,7 @@ classdef NE
     
     
     function [newWeights, newAdj, newThresh] = neuronCountMutation(Adj, weights,  thresh, minSize)
-    
+    if rand(1,1) > .99
     if rand(1,1) > .5
         newThresh = [thresh ; rand(1,1)] ;
         newWeights = [[weights zeros(size(weights,1), 1)];zeros(1,size(weights,1)+1)];
@@ -125,21 +125,25 @@ classdef NE
         newWeights = weights;
         newAdj = Adj;
     end
-    
+    else
+         newThresh = thresh;
+        newWeights = weights;
+        newAdj = Adj;
+    end
     end
     
+    function [newAdj, newW] = connectivityMutation(Adj,w)
     
-    function newAdj = connectivityMutation(Adj)
-    
-    output = Adj;
+    newAdj = Adj;
+    newW = w;
     for i = 1:size(Adj,1)
         for c = 1:size(Adj,1)
-        if rand(1,1) > .5 && i ~= c 
-               output(i,c) = xor(output(i,c),1) ;
+        if rand(1,1) > .95 && i ~= c 
+               newAdj(i,c) = xor(newAdj(i,c),1) ;
+               newW(i,c) = rand(1,1);
         end
         end
     end
-     newAdj = output;
     end
     
     function newWeights = weightMutation(weights)
@@ -147,7 +151,7 @@ classdef NE
       output = weights;
     for i = 1:size(weights,1)
         for c = 1:size(weights,1)
-        if rand(1,1) > .5 && i ~= c 
+        if rand(1,1) > .85 && i ~= c 
                output(i,c) = output(i,c) + ((rand(1,1) - .5)/10.0);
         end
         end
@@ -160,8 +164,9 @@ classdef NE
     function newThresh = thresholdMutation(thresh)
     output = thresh;
     for i = 1:size(thresh,2)
+        if rand() > .95
         output(i,1) = output(i,1) + ((rand(1,1) - .5)/10.0);
-    
+        end
     end
     newThresh = output;
     
@@ -187,9 +192,22 @@ classdef NE
         end
     
     end
+    
+    function activation = posToActivation(val, lower, upper)
+        percent = (val - lower)/ (upper - lower );
+        activation = [];
+        for i = 1:9
+        if percent * 10 >= i && percent * 10 < i+1
+        activation = [activation 1];
+        else 
+            activation = [activation 0];
+        end
+        end
+    
     end
-
+    end
 end
+
     
     
     

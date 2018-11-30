@@ -59,6 +59,7 @@ PADDLE_SPEED = 1.3;
 %a paddle. 2 seems to work well for P_FACTOR.
 B_FACTOR = 1;
 P_FACTOR = 2;
+TERM = 0;
 %Y_FACTOR is used to fix a bug where ball would get 'stuck' bouncing
 %back and forth along the top or bottom wall. A collision with top or
 %bottom wall causes a bounce where new dx is -(old dx). If old dx is 0 then
@@ -301,6 +302,85 @@ paddle2 = [];
     else
       %no hits
     end
+  
+    
+    %move ball to new location
+    ballX = newX;
+    ballY = newY;
+  end
+%------------moveBallIgnoreGoal------------
+%calculates new ball location
+%checks if it will hit any walls or paddles
+%if it does, call bounce to change ball vector
+%move ball to new location
+%called from main loop on every frame
+  function moveBallIgnoreGoal
+    
+    %paddle boundaries, useful for hit testing ball
+    p1T = paddle1(2,1);
+    p1B = paddle1(2,3);
+    p1L = paddle1(1,1);
+    p1R = paddle1(1,2);
+    p1Center = ([p1L p1B] + [p1R p1T]) ./ 2;
+    p2T = paddle2(2,1);
+    p2B = paddle2(2,3);
+    p2L = paddle2(1,1);
+    p2R = paddle2(1,2);
+    p2Center = ([p2L p2B] + [p2R p2T]) ./ 2;
+    
+    %while hit %calculate new vectors until we know it wont hit something
+    %temporary new ball location, only apply if ball doesn't hit anything.
+    newX = ballX + (ballSpeed * ballVector(1));
+    newY = ballY + (ballSpeed * ballVector(2));
+    
+    %hit test right wall
+    if (newX > (PLOT_W - BALL_RADIUS))
+      %hit right wall
+    
+        bounce([-1 * abs(ballVector(1)), ballVector(2)]);
+      
+      
+      %hit test left wall
+    elseif (newX < BALL_RADIUS ...
+        && (newY<GOAL_BOT+BALL_RADIUS || newY>GOAL_TOP-BALL_RADIUS))
+      %hit left wall
+      if (newY > GOAL_BOT && newY < GOAL_TOP - BALL_RADIUS)
+        %hit bottom goal edge
+        bounce([newX, newY - GOAL_BOT]);
+      elseif (newY < GOAL_TOP && newY > GOAL_BOT + BALL_RADIUS)
+        %hit top goal edge
+        bounce([newX, newY - GOAL_TOP]);
+      else
+        bounce([abs(ballVector(1)), ballVector(2)]);
+      end
+      
+      %hit test top wall
+    elseif (newY > (PLOT_H - BALL_RADIUS))
+      %hit top wall
+      bounce([ballVector(1), -1 * (Y_FACTOR + abs(ballVector(2)))]);
+      %hit test bottom wall
+    elseif (newY < BALL_RADIUS)
+      %hit bottom wall,
+      bounce([ballVector(1), (Y_FACTOR + abs(ballVector(2)))]);
+      
+      %hit test paddle 1
+    elseif (newX < p1R + BALL_RADIUS ...
+        && newX > p1L - BALL_RADIUS ...
+        && newY < p1T + BALL_RADIUS ...
+        && newY > p1B - BALL_RADIUS)
+      bounce([(ballX-p1Center(1)) * P_FACTOR, newY-p1Center(2)]);
+      
+      %hit test paddle 2
+    elseif (newX < p2R + BALL_RADIUS ...
+        && newX > p2L - BALL_RADIUS ...
+        && newY < p2T + BALL_RADIUS ...
+        && newY > p2B - BALL_RADIUS)
+      bounce([(ballX-p2Center(1)) * P_FACTOR, newY-p2Center(2)]);
+    else
+      %no hits
+    end
+    
+   
     
     %move ball to new location
     ballX = newX;
@@ -348,11 +428,12 @@ paddle2 = [];
     goal = false;
     
     if ballX > PLOT_W + BALL_RADIUS + GOAL_BUFFER
-      score(1) = score(1) + 1;
+      score(1) = score(1) + 5;
       if score(1) == MAX_POINTS;
         winner = 1;
       end
       goal = true;
+    
     elseif ballX < 0 - BALL_RADIUS - GOAL_BUFFER
       score(2) = score(2) + 1;
       if score(2) == MAX_POINTS;
@@ -411,6 +492,13 @@ paddle2 = [];
     %helps keep the ball moving more horizontally than vertically.
     tempV(1) = tempV(1) * ((rand/B_FACTOR) + 1);
     %normalize vector
+      if tempV(1) < .005
+        tempV(1) = tempV(1) + (2 * rand()) - 1;
+      end
+   if tempV(2) <.005
+        tempV(2) = tempV(2) + (2 * rand())-1;
+   end
+    
     tempV = tempV ./ (sqrt(tempV(1)^2 + tempV(2)^2));
     ballVector = tempV;
     %just to make things interesting, bouncing accelerates ball
@@ -430,7 +518,10 @@ paddle2 = [];
         paddle1V = -1;
       case 'uparrow'
         paddle2V = 1;
+         case 't'
+        TERM = 1;
       case 'downarrow'
+       
         paddle2V = -1;
       case 'p'
         if ~paused
@@ -472,15 +563,8 @@ paddle2 = [];
 % newGame;
 % while ~quitGame
 %     
-%   ballxd = ballX
-%   ballyd = ballY
-%   ballvect = ballSpeed * ballVector
-%   ballXVel = ballvect(1,1)
-%   ballYvel = ballvect(1,2)
-%   pad1y = paddle1(2,2) - paddle1(2,3)
-%   pad2y = paddle2(2,2) - paddle2(2,3)
-%   
-%   moveBall;
+% 
+%   moveBallIgnoreGoal;
 %   movePaddles;
 %   refreshPlot;
 %   checkGoal;
@@ -490,16 +574,22 @@ paddle2 = [];
 %-------------------------NAIVE LEARNING---------------------
  %createFigure;
 
-[bestAdj, bestW, bestThresh] = NE.randTopology(64)
-for c = 1:100
-    epoch = c
-[mAdj, mW, mThresh] = NE.mutate(bestAdj,bestW,bestThresh,64);
+[bestAdj, bestW, bestThresh] = NE.randTopology(66)
+bestScore = 0
+generation = 0;
+while bestScore < 9000
+    generation = generation + 1 ;
+    if 0 == mod(generation, 50)
+    gen = generation
+    end
+[mAdj, mW, mThresh] = NE.mutate(bestAdj,bestW,bestThresh,66);
  newGame;
  
- p1Output =  zeros(1,62);
- p2Output =  zeros(1,62);
+ p1Output =  zeros(1,65);
+ p2Output =  zeros(1,65);
  counter = 0;
- while winner == 0 && counter < 10000
+ moved = 0;
+ while winner == 0 
  counter = counter + 1 ;
  %feed brains world state and extract actuation
  
@@ -521,41 +611,49 @@ for c = 1:100
         p1XVelSign = 0;
         p2XVelSign = 1;
     end
-  P1BallXPosActivation = NE.valToActivation(ballXPos, 0, 140);
-  P2BallXPosActivation = NE.valToActivation(140- ballXPos, 0, 140);
-  ballYPosActivation = NE.valToActivation(ballYPos, 0, 100);
-  ballXVelActivation = NE.valToActivation(abs(ballYVel), 0, 3);
+  ballYVelSign = (ballYVel > 0);
+  P1BallXPosActivation = NE.posToActivation(ballXPos, 0, 140);
+  P2BallXPosActivation = NE.posToActivation(140- ballXPos, 0, 140);
+  ballYPosActivation = NE.posToActivation(ballYPos, 0, 100);
+  ballXVelActivation = NE.posToActivation(abs(ballYVel), 0, 3);
   ballYVelActivation = NE.valToActivation(abs(ballYVel), 0, 3);
-  p1YPosActivation = NE.valToActivation(pad1Y, 9,91);
-  p2YPosActivation = NE.valToActivation(pad2Y, 9,91);
+  p1YPosActivation = NE.posToActivation(pad1Y, 9,91);
+  p2YPosActivation = NE.posToActivation(pad2Y, 9,91);
   p1Input = [p1Input P1BallXPosActivation ballYPosActivation p1XVelSign ];
-  p1Input = [p1Input ballXVelActivation ballYVelActivation p1YPosActivation p2YPosActivation];
+  p1Input = [p1Input ballXVelActivation ballYVelSign ballYVelActivation p1YPosActivation p2YPosActivation];
   p1Input = NE.combine(p1Output, p1Input);
   p2Input = [p2Input P2BallXPosActivation ballYPosActivation p2XVelSign ];
-  p2Input = [p2Input ballXVelActivation ballYVelActivation p2YPosActivation p1YPosActivation];
+  p2Input = [p2Input ballXVelActivation ballYVelSign ballYVelActivation p2YPosActivation p1YPosActivation];
   p2Input = NE.combine(p2Output, p2Input);
 
 
-  p1Output = NE.advance(bestAdj, bestW, p1Input, bestThresh)';
-  p2Output = NE.advance(mAdj, mW, p2Input, mThresh)';
+ % p1Output = NE.advance(bestAdj, bestW, p1Input, bestThresh)';
+  p1Output = NE.advance(mAdj, mW, p1Input, mThresh)';
  
-  p1Decision = p1Output(1,63:64);
-  p2Decision = p2Output(1,63:64);
+  p1Decision = p1Output(1,65:66);
+  %p2Decision = p2Output(1,65:66);
  
-  paddle1V = p1Decision(1,1) - p1Decision(1,2);
-  paddle2V = p2Decision(1,1) - p2Decision(1,2);
+  paddle1V = p1Decision(1,2) - p1Decision(1,1);
+  paddle2V = 0; % p2Decision(1,1) - p2Decision(1,2);
+  if p1Decision(1,1) - p1Decision(1,2) ~= 0
+      moved = 1;
+  end
 
   
-  moveBall;
+  moveBallIgnoreGoal;
   movePaddles;
   checkGoal;
   %refreshPlot;
  
  end
- if winner == 2
- bestAdj = mAdj
- bestW = mW
- bestThresh = mThresh
+%  if counter > 5000
+%      counter = 0
+%  end
+ if counter > bestScore && moved == 1
+ bestScore = counter
+ bestAdj = mAdj;
+ bestW = mW;
+ bestThresh = mThresh;
  end
 end
 %end
@@ -566,8 +664,8 @@ while 1
 %[mAdj, mW, mThresh] = NE.mutate(bestAdj,bestW,bestThresh,64);
  newGame;
  
- p1Output =  zeros(1,62);
- p2Output =  zeros(1,62);
+ p1Output =  zeros(1,65);
+ p2Output =  zeros(1,65);
  while winner == 0 
  %feed brains world state and extract actuation
  
@@ -589,13 +687,13 @@ while 1
         p1XVelSign = 0;
         p2XVelSign = 1;
     end
-  P1BallXPosActivation = NE.valToActivation(ballXPos, 0, 140);
-  P2BallXPosActivation = NE.valToActivation(140- ballXPos, 0, 140);
-  ballYPosActivation = NE.valToActivation(ballYPos, 0, 100);
-  ballXVelActivation = NE.valToActivation(abs(ballYVel), 0, 3);
+ P1BallXPosActivation = NE.posToActivation(ballXPos, 0, 140);
+  P2BallXPosActivation = NE.posToActivation(140- ballXPos, 0, 140);
+  ballYPosActivation = NE.posToActivation(ballYPos, 0, 100);
+  ballXVelActivation = NE.posToActivation(abs(ballYVel), 0, 3);
   ballYVelActivation = NE.valToActivation(abs(ballYVel), 0, 3);
-  p1YPosActivation = NE.valToActivation(pad1Y, 9,91);
-  p2YPosActivation = NE.valToActivation(pad2Y, 9,91);
+  p1YPosActivation = NE.posToActivation(pad1Y, 9,91);
+  p2YPosActivation = NE.posToActivation(pad2Y, 9,91);
   p1Input = [p1Input P1BallXPosActivation ballYPosActivation p1XVelSign ];
   p1Input = [p1Input ballXVelActivation ballYVelActivation p1YPosActivation p2YPosActivation];
   p1Input = NE.combine(p1Output, p1Input);
@@ -607,8 +705,8 @@ while 1
   p1Output = NE.advance(bestAdj, bestW, p1Input, bestThresh)';
   p2Output = NE.advance(bestAdj, bestW, p2Input, bestThresh)';
  
-  p1Decision = p1Output(1,63:64);
-  p2Decision = p2Output(1,63:64);
+  p1Decision = p1Output(1,65:66);
+  p2Decision = p2Output(1,65:66);
  
   paddle1V = p1Decision(1,1) - p1Decision(1,2);
   paddle2V = p2Decision(1,1) - p2Decision(1,2);
