@@ -230,7 +230,6 @@ paddle2 = [];
 %move ball to new location
 %called from main loop on every frame
   function moveBall
-    
     %paddle boundaries, useful for hit testing ball
     p1T = paddle1(2,1);
     p1B = paddle1(2,3);
@@ -314,8 +313,8 @@ paddle2 = [];
 %if it does, call bounce to change ball vector
 %move ball to new location
 %called from main loop on every frame
-  function moveBallIgnoreGoal
-    
+    function hit =  moveBallIgnoreGoal
+    hit = 0 ;
     %paddle boundaries, useful for hit testing ball
     p1T = paddle1(2,1);
     p1B = paddle1(2,3);
@@ -369,7 +368,7 @@ paddle2 = [];
         && newY < p1T + BALL_RADIUS ...
         && newY > p1B - BALL_RADIUS)
       bounce([(ballX-p1Center(1)) * P_FACTOR, newY-p1Center(2)]);
-      
+      hit = 1;
       %hit test paddle 2
     elseif (newX < p2R + BALL_RADIUS ...
         && newX > p2L - BALL_RADIUS ...
@@ -435,7 +434,7 @@ paddle2 = [];
       goal = true;
     
     elseif ballX < 0 - BALL_RADIUS - GOAL_BUFFER
-      score(2) = score(2) + 1;
+      score(2) = score(2) + 5;
       if score(2) == MAX_POINTS;
         winner = 2;
       end
@@ -558,12 +557,95 @@ paddle2 = [];
         end
     end
   end
+  function result = evaluate(scoreLimit, trials, Adj, w, thresh)
+        
+        counter = 0;
+        
+        for t = 1:trials
+            newGame;
+            
+            p1Output =  zeros(1,18);
+            p2Output =  zeros(1,18);
+            moved = 0;
+            time = 0;
+            while winner ~= 2 && time < scoreLimit
+                counter = counter + 1;
+                time = time +1;
+                %feed brains world state and extract actuation
+                
+                if mod(time, 10) == 0
+                    %initializing empty brain inputs with bias bit
+                    p1Input = [1];
+                    p2Input = [1];
+                    %collecting and processing values from the runtime to feed to the networks
+                    ballXPos = ballX;
+                    ballYPos = ballY;
+                    ballVect = ballSpeed * ballVector;
+                    ballXVel = ballVect(1,1);
+                    ballYVel = ballVect(1,2);
+                    pad1Y = (paddle1(2,2) + paddle1(2,3))/2;
+                    pad2Y = (paddle2(2,2) + paddle2(2,3))/2;
+                    if ballXVel > 0
+                        p1BallXVelSign = 1;
+                        p2BallXVelSign = 0;
+                    else
+                        p1BallXVelSign = 0;
+                        p2BallXVelSign = 1;
+                    end
+                    ballYVelSign = (ballYVel > 0);
+                    %P1BallXPosActivation = NE.posToActivation(ballXPos, 0, 140,7);
+                    ballYPosActivation = NE.posToActivation(ballYPos, 0, 100,7);
+                    %ballXVelActivation = NE.posToActivation(abs(ballYVel), 0, 1,3);
+                    % ballYVelActivation = NE.valToActivation(abs(ballYVel), 0, 1,3);
+                    p1YPosActivation = NE.posToActivation(pad1Y, 9,91,7);
+                    %p1Input = [p1Input ballYVelSign p1BallXVelSign P1BallXPosActivation ...
+                    %ballYPosActivation  ballXVelActivation ballYVelActivation p1YPosActivation];
+                    p1Input = [p1Input ballYVelSign ballYPosActivation p1YPosActivation];
+                    if pad1Y < 20 || pad1Y > 80
+                       break
+                    end
+                    
+                    
+                    % p1Output = NE.advance(bestAdj, bestW, p1Input, bestThresh)';
+                    p1Output = NE.advance(Adj, w, p1Input, thresh)';
+                    
+                    p1Decision = p1Output(1,17:18);
+                    %p2Decision = p2Output(1,65:66);
+                    
+                    paddle1V = p1Decision(1,2)  -  p1Decision(1,1);
+                    paddle2V = 0; % p2Decision(1,1) - p2Decision(1,2);
+                    if p1Decision(1,1) - p1Decision(1,2) ~= 0
+                        moved = 1;
+                    end
+                end
+                
+                if(moveBallIgnoreGoal()) == 1
+                    % counter = counter + 1;
+                end
+                movePaddles;
+                checkGoal;
+                % refreshPlot;
+                
+                
+                
+            end
+            %minCount = min(minCount, counter);
+            %  if counter > 5000
+            %      counter = 0
+            %  end
+            
+        end
+        result = counter / trials;
+        if moved == 0 
+        result = 0;
+        end
+    end
 %----------------------MAIN SCRIPT----------------------
 % createFigure;
 % newGame;
 % while ~quitGame
-%     
-% 
+%
+%
 %   moveBallIgnoreGoal;
 %   movePaddles;
 %   refreshPlot;
@@ -572,145 +654,101 @@ paddle2 = [];
 % close(fig);
 % end
 %-------------------------NAIVE LEARNING---------------------
- %createFigure;
+% createFigure;
 
-[bestAdj, bestW, bestThresh] = NE.randTopology(66)
-bestScore = 0
+[bestAdj, bestW, bestThresh]  =    NE.readFromFile();%  NE.randTopology(18); %
+scoreLimit = 2000;
+trials = 10;
+bestScore = evaluate(scoreLimit, trials, bestAdj, bestW, bestThresh)
 generation = 0;
-while bestScore < 9000
+average = 0;
+while bestScore < 0
+[mAdj, mW, mThresh] = NE.mutate(bestAdj,bestW,bestThresh,18);
+
+result = evaluate(scoreLimit,trials,mAdj,mW,mThresh);
+
     generation = generation + 1 ;
     if 0 == mod(generation, 50)
-    gen = generation
-    end
-[mAdj, mW, mThresh] = NE.mutate(bestAdj,bestW,bestThresh,66);
- newGame;
- 
- p1Output =  zeros(1,65);
- p2Output =  zeros(1,65);
- counter = 0;
- moved = 0;
- while winner == 0 
- counter = counter + 1 ;
- %feed brains world state and extract actuation
- 
- %initializing empty brain inputs with bias bit
- p1Input = [1];
- p2Input = [1];
- %collecting and processing values from the runtime to feed to the networks
-  ballXPos = ballX;
-  ballYPos = ballY;
-  ballVect = ballSpeed * ballVector;
-  ballXVel = ballVect(1,1);
-  ballYVel = ballVect(1,2);
-  pad1Y = paddle1(2,2) - paddle1(2,3);
-  pad2Y = paddle2(2,2) - paddle2(2,3);
-    if ballXVel > 0
-        p1XVelSign = 1;
-        p2XVelSign = 0;
+    average = average/ 50.0
+    average = 0;
+    gen = generation;
     else
-        p1XVelSign = 0;
-        p2XVelSign = 1;
+    average = average + result;
     end
-  ballYVelSign = (ballYVel > 0);
-  P1BallXPosActivation = NE.posToActivation(ballXPos, 0, 140);
-  P2BallXPosActivation = NE.posToActivation(140- ballXPos, 0, 140);
-  ballYPosActivation = NE.posToActivation(ballYPos, 0, 100);
-  ballXVelActivation = NE.posToActivation(abs(ballYVel), 0, 3);
-  ballYVelActivation = NE.valToActivation(abs(ballYVel), 0, 3);
-  p1YPosActivation = NE.posToActivation(pad1Y, 9,91);
-  p2YPosActivation = NE.posToActivation(pad2Y, 9,91);
-  p1Input = [p1Input P1BallXPosActivation ballYPosActivation p1XVelSign ];
-  p1Input = [p1Input ballXVelActivation ballYVelSign ballYVelActivation p1YPosActivation p2YPosActivation];
-  p1Input = NE.combine(p1Output, p1Input);
-  p2Input = [p2Input P2BallXPosActivation ballYPosActivation p2XVelSign ];
-  p2Input = [p2Input ballXVelActivation ballYVelSign ballYVelActivation p2YPosActivation p1YPosActivation];
-  p2Input = NE.combine(p2Output, p2Input);
 
-
- % p1Output = NE.advance(bestAdj, bestW, p1Input, bestThresh)';
-  p1Output = NE.advance(mAdj, mW, p1Input, mThresh)';
- 
-  p1Decision = p1Output(1,65:66);
-  %p2Decision = p2Output(1,65:66);
- 
-  paddle1V = p1Decision(1,2) - p1Decision(1,1);
-  paddle2V = 0; % p2Decision(1,1) - p2Decision(1,2);
-  if p1Decision(1,1) - p1Decision(1,2) ~= 0
-      moved = 1;
-  end
-
-  
-  moveBallIgnoreGoal;
-  movePaddles;
-  checkGoal;
-  %refreshPlot;
- 
- end
-%  if counter > 5000
-%      counter = 0
-%  end
- if counter > bestScore && moved == 1
- bestScore = counter
+ if result > bestScore 
+     verifiedResult = evaluate(scoreLimit, trials * 10,mAdj,mW,mThresh); 
+     if verifiedResult > bestScore
+ bestScore = verifiedResult
  bestAdj = mAdj;
  bestW = mW;
  bestThresh = mThresh;
+     end
  end
 end
 %end
 %-------------------------OBSERVE---------------------
 createFigure;
-%[bestAdj, bestW, bestThresh] = NE.randTopology(64)
+%[bestAdj, bestW, bestThresh] = NE.readFromFile()
+
 while 1
 %[mAdj, mW, mThresh] = NE.mutate(bestAdj,bestW,bestThresh,64);
  newGame;
  
- p1Output =  zeros(1,65);
- p2Output =  zeros(1,65);
+ p1Output =  zeros(1,18);
+ p2Output =  zeros(1,18);
+ time = 0
  while winner == 0 
+     time = time +1;
+     if mod(time, 10) == 0
  %feed brains world state and extract actuation
  
  %initializing empty brain inputs with bias bit
  p1Input = [1];
  p2Input = [1];
  %collecting and processing values from the runtime to feed to the networks
-  ballXPos = ballX;
+ ballXPos = ballX;
   ballYPos = ballY;
   ballVect = ballSpeed * ballVector;
   ballXVel = ballVect(1,1);
   ballYVel = ballVect(1,2);
-  pad1Y = paddle1(2,2) - paddle1(2,3);
-  pad2Y = paddle2(2,2) - paddle2(2,3);
+   pad1Y = (paddle1(2,2) + paddle1(2,3))/2;
+  pad2Y = (paddle2(2,2) + paddle2(2,3))/2;
     if ballXVel > 0
-        p1XVelSign = 1;
-        p2XVelSign = 0;
+        p1BallXVelSign = 1;
+        p2BallXVelSign = 0;
     else
-        p1XVelSign = 0;
-        p2XVelSign = 1;
+        p1BallXVelSign = 0;
+        p2BallXVelSign = 1;
     end
- P1BallXPosActivation = NE.posToActivation(ballXPos, 0, 140);
-  P2BallXPosActivation = NE.posToActivation(140- ballXPos, 0, 140);
-  ballYPosActivation = NE.posToActivation(ballYPos, 0, 100);
-  ballXVelActivation = NE.posToActivation(abs(ballYVel), 0, 3);
-  ballYVelActivation = NE.valToActivation(abs(ballYVel), 0, 3);
-  p1YPosActivation = NE.posToActivation(pad1Y, 9,91);
-  p2YPosActivation = NE.posToActivation(pad2Y, 9,91);
-  p1Input = [p1Input P1BallXPosActivation ballYPosActivation p1XVelSign ];
-  p1Input = [p1Input ballXVelActivation ballYVelActivation p1YPosActivation p2YPosActivation];
-  p1Input = NE.combine(p1Output, p1Input);
-  p2Input = [p2Input P2BallXPosActivation ballYPosActivation p2XVelSign ];
-  p2Input = [p2Input ballXVelActivation ballYVelActivation p2YPosActivation p1YPosActivation];
-  p2Input = NE.combine(p2Output, p2Input);
+  ballYVelSign = (ballYVel > 0);
+  %P1BallXPosActivation = NE.posToActivation(ballXPos, 0, 140,7);
+  %P2BallXPosActivation = NE.posToActivation(140- ballXPos, 0, 140,7);
+
+  ballYPosActivation = NE.posToActivation(ballYPos, 0, 100,7);
+  %ballXVelActivation = NE.posToActivation(abs(ballYVel), 0, 1,3);
+  %ballYVelActivation = NE.valToActivation(abs(ballYVel), 0, 1,3);
+  p1YPosActivation = NE.posToActivation(pad1Y, 9,91,7);
+  p2YPosActivation = NE.posToActivation(pad2Y, 9,91,7);
+
+% p1Input = [p1Input ballYVelSign p1BallXVelSign P1BallXPosActivation ...
+ %  ballYPosActivation  ballXVelActivation ballYVelActivation p1YPosActivation];
+  %p2Input = [p2Input ballYVelSign p2BallXVelSign P2BallXPosActivation ...
+   %ballYPosActivation  ballXVelActivation ballYVelActivation p2YPosActivation];
+
+    p1Input = [p1Input ballYVelSign ballYPosActivation p1YPosActivation];
+    p2Input = [p2Input ballYVelSign ballYPosActivation p2YPosActivation];
 
 
   p1Output = NE.advance(bestAdj, bestW, p1Input, bestThresh)';
   p2Output = NE.advance(bestAdj, bestW, p2Input, bestThresh)';
  
-  p1Decision = p1Output(1,65:66);
-  p2Decision = p2Output(1,65:66);
+  p1Decision = p1Output(1,17:18);
+  p2Decision = p2Output(1,17:18);
  
   paddle1V = p1Decision(1,1) - p1Decision(1,2);
   paddle2V = p2Decision(1,1) - p2Decision(1,2);
-
+     end
   
   moveBall;
   movePaddles;

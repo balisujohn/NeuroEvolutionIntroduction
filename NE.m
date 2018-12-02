@@ -138,7 +138,7 @@ classdef NE
     newW = w;
     for i = 1:size(Adj,1)
         for c = 1:size(Adj,1)
-        if rand(1,1) > .95 && i ~= c 
+        if rand(1,1) > .99 && i ~= c 
                newAdj(i,c) = xor(newAdj(i,c),1) ;
                newW(i,c) = rand(1,1);
         end
@@ -151,7 +151,7 @@ classdef NE
       output = weights;
     for i = 1:size(weights,1)
         for c = 1:size(weights,1)
-        if rand(1,1) > .85 && i ~= c 
+        if rand(1,1) > .9 && i ~= c 
                output(i,c) = output(i,c) + ((rand(1,1) - .5)/10.0);
         end
         end
@@ -164,7 +164,7 @@ classdef NE
     function newThresh = thresholdMutation(thresh)
     output = thresh;
     for i = 1:size(thresh,2)
-        if rand() > .95
+        if rand() > .9
         output(i,1) = output(i,1) + ((rand(1,1) - .5)/10.0);
         end
     end
@@ -180,11 +180,11 @@ classdef NE
     
     end
     
-    function activation = valToActivation(val, lower, upper)
+    function activation = valToActivation(val, lower, upper, size)
         percent = (val - lower)/ (upper - lower );
         activation = [];
-        for i = 1:10
-        if percent * 10 >= i
+        for i = 1:size
+        if percent * size >= i
         activation = [activation 1];
         else 
             activation = [activation 0];
@@ -193,11 +193,11 @@ classdef NE
     
     end
     
-    function activation = posToActivation(val, lower, upper)
+    function activation = posToActivation(val, lower, upper,size)
         percent = (val - lower)/ (upper - lower );
         activation = [];
-        for i = 1:9
-        if percent * 10 >= i && percent * 10 < i+1
+        for i = 1:size
+        if percent * size >= i-1  && percent * size <= i
         activation = [activation 1];
         else 
             activation = [activation 0];
@@ -205,7 +205,15 @@ classdef NE
         end
     
     end
+   
+    
+    function [Adj, W, thresh] = readFromFile()
+    Adj = csvread('bestAdj.csv');
+    W = csvread('bestW.csv');
+    thresh = csvread('bestThresh.csv')
     end
+    end
+    
 end
 
     
