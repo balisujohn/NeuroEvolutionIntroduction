@@ -70,8 +70,17 @@ classdef NE
     
     function [Adj, W, thresh] = randTopology(size)
     %creates a random adjacency matrix
-    Adj =  zeros(size,size)%randi([0 1],size,size);
-    for i = 1:size;
+    Adj =  zeros(size,size)%
+    for i = 1:size
+        for c = 1:size
+            if rand() > .9 && i ~= c
+                Adj(i,c) =1;
+            end
+        end
+    end
+    
+    
+    for i = 1:size
     Adj(i,i) = 0;
     end
 
@@ -79,7 +88,7 @@ classdef NE
     W = rand(size,size) - .5 ;
 
     %creates a random threshold vectors
-    thresh = rand(size,1);
+    thresh = rand(size,1) - .5;
     
     end
 
@@ -111,7 +120,7 @@ classdef NE
     
     
     function [newWeights, newAdj, newThresh] = neuronCountMutation(Adj, weights,  thresh, minSize)
-    if rand(1,1) > .99
+    if rand(1,1) < .25
     if rand(1,1) > .5
         newThresh = [thresh ; rand(1,1)] ;
         newWeights = [[weights zeros(size(weights,1), 1)];zeros(1,size(weights,1)+1)];
@@ -136,11 +145,19 @@ classdef NE
     
     newAdj = Adj;
     newW = w;
-    for i = 1:size(Adj,1)
-        for c = 1:size(Adj,1)
-        if rand(1,1) > .99 && i ~= c 
-               newAdj(i,c) = xor(newAdj(i,c),1) ;
+    for c = 1:size(Adj,1)
+        for i = 1:size(Adj,1)
+        AdjSum = sum(newAdj(:,c)');
+        if rand(1,1) > .9 && i ~= c 
+            if  rand(1,1) >.5 && AdjSum < 10
+               newAdj(i,c) = 1;
                newW(i,c) = rand(1,1);
+            
+            else
+                newAdj(i,c) = 0;
+               newW(i,c) = 0;
+            end
+                
         end
         end
     end
@@ -151,7 +168,7 @@ classdef NE
       output = weights;
     for i = 1:size(weights,1)
         for c = 1:size(weights,1)
-        if rand(1,1) > .9 && i ~= c 
+        if rand(1,1) > .95 && i ~= c 
                output(i,c) = output(i,c) + ((rand(1,1) - .5)/10.0);
         end
         end
@@ -165,7 +182,7 @@ classdef NE
     output = thresh;
     for i = 1:size(thresh,2)
         if rand() > .9
-        output(i,1) = output(i,1) + ((rand(1,1) - .5)/10.0);
+        output(i,1) = output(i,1) + ((rand(1,1) - .5)/5);
         end
     end
     newThresh = output;

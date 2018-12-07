@@ -593,14 +593,14 @@ paddle2 = [];
                         p2BallXVelSign = 1;
                     end
                     ballYVelSign = (ballYVel > 0);
-                    %P1BallXPosActivation = NE.posToActivation(ballXPos, 0, 140,7);
+                    P1BallXPosActivation = NE.posToActivation(ballXPos, 0, 140,7);
                     ballYPosActivation = NE.posToActivation(ballYPos, 0, 100,7);
-                    %ballXVelActivation = NE.posToActivation(abs(ballYVel), 0, 1,3);
-                    % ballYVelActivation = NE.valToActivation(abs(ballYVel), 0, 1,3);
+                    ballXVelActivation = NE.posToActivation(abs(ballYVel), 0, 1,3);
+                     ballYVelActivation = NE.valToActivation(abs(ballYVel), 0, 1,3);
                     p1YPosActivation = NE.posToActivation(pad1Y, 9,91,7);
-                    %p1Input = [p1Input ballYVelSign p1BallXVelSign P1BallXPosActivation ...
-                    %ballYPosActivation  ballXVelActivation ballYVelActivation p1YPosActivation];
-                    p1Input = [p1Input ballYVelSign ballYPosActivation p1YPosActivation];
+                    p1Input = [p1Input ballYVelSign p1BallXVelSign P1BallXPosActivation ...
+                    ballYPosActivation  ballXVelActivation ballYVelActivation p1YPosActivation];
+                   % p1Input = [p1Input ballYVelSign ballYPosActivation p1YPosActivation];
                     if pad1Y < 20 || pad1Y > 80
                        break
                     end
@@ -609,7 +609,7 @@ paddle2 = [];
                     % p1Output = NE.advance(bestAdj, bestW, p1Input, bestThresh)';
                     p1Output = NE.advance(Adj, w, p1Input, thresh)';
                     
-                    p1Decision = p1Output(1,17:18);
+                    p1Decision = p1Output(1,31:32);
                     %p2Decision = p2Output(1,65:66);
                     
                     paddle1V = p1Decision(1,2)  -  p1Decision(1,1);
@@ -656,14 +656,14 @@ paddle2 = [];
 %-------------------------NAIVE LEARNING---------------------
 % createFigure;
 
-[bestAdj, bestW, bestThresh]  =    NE.readFromFile();%  NE.randTopology(18); %
+[bestAdj, bestW, bestThresh]  =   NE.randTopology(32);   % NE.readFromFile();% 
 scoreLimit = 2000;
 trials = 10;
-bestScore = evaluate(scoreLimit, trials, bestAdj, bestW, bestThresh)
+bestScore = evaluate(scoreLimit, trials*10, bestAdj, bestW, bestThresh)
 generation = 0;
 average = 0;
-while bestScore < 0
-[mAdj, mW, mThresh] = NE.mutate(bestAdj,bestW,bestThresh,18);
+while bestScore < scoreLimit
+[mAdj, mW, mThresh] = NE.mutate(bestAdj,bestW,bestThresh,32);
 
 result = evaluate(scoreLimit,trials,mAdj,mW,mThresh);
 
@@ -695,8 +695,8 @@ while 1
 %[mAdj, mW, mThresh] = NE.mutate(bestAdj,bestW,bestThresh,64);
  newGame;
  
- p1Output =  zeros(1,18);
- p2Output =  zeros(1,18);
+ p1Output =  zeros(1,32);
+ p2Output =  zeros(1,32);
  time = 0
  while winner == 0 
      time = time +1;
@@ -722,29 +722,29 @@ while 1
         p2BallXVelSign = 1;
     end
   ballYVelSign = (ballYVel > 0);
-  %P1BallXPosActivation = NE.posToActivation(ballXPos, 0, 140,7);
-  %P2BallXPosActivation = NE.posToActivation(140- ballXPos, 0, 140,7);
+  P1BallXPosActivation = NE.posToActivation(ballXPos, 0, 140,7);
+  P2BallXPosActivation = NE.posToActivation(140- ballXPos, 0, 140,7);
 
   ballYPosActivation = NE.posToActivation(ballYPos, 0, 100,7);
-  %ballXVelActivation = NE.posToActivation(abs(ballYVel), 0, 1,3);
-  %ballYVelActivation = NE.valToActivation(abs(ballYVel), 0, 1,3);
+  ballXVelActivation = NE.posToActivation(abs(ballYVel), 0, 1,3);
+  ballYVelActivation = NE.valToActivation(abs(ballYVel), 0, 1,3);
   p1YPosActivation = NE.posToActivation(pad1Y, 9,91,7);
   p2YPosActivation = NE.posToActivation(pad2Y, 9,91,7);
 
-% p1Input = [p1Input ballYVelSign p1BallXVelSign P1BallXPosActivation ...
- %  ballYPosActivation  ballXVelActivation ballYVelActivation p1YPosActivation];
-  %p2Input = [p2Input ballYVelSign p2BallXVelSign P2BallXPosActivation ...
-   %ballYPosActivation  ballXVelActivation ballYVelActivation p2YPosActivation];
+ p1Input = [p1Input ballYVelSign p1BallXVelSign P1BallXPosActivation ...
+   ballYPosActivation  ballXVelActivation ballYVelActivation p1YPosActivation];
+  p2Input = [p2Input ballYVelSign p2BallXVelSign P2BallXPosActivation ...
+   ballYPosActivation  ballXVelActivation ballYVelActivation p2YPosActivation];
 
-    p1Input = [p1Input ballYVelSign ballYPosActivation p1YPosActivation];
-    p2Input = [p2Input ballYVelSign ballYPosActivation p2YPosActivation];
+    %p1Input = [p1Input ballYVelSign ballYPosActivation p1YPosActivation];
+    %p2Input = [p2Input ballYVelSign ballYPosActivation p2YPosActivation];
 
 
   p1Output = NE.advance(bestAdj, bestW, p1Input, bestThresh)';
   p2Output = NE.advance(bestAdj, bestW, p2Input, bestThresh)';
  
-  p1Decision = p1Output(1,17:18);
-  p2Decision = p2Output(1,17:18);
+  p1Decision = p1Output(1,31:32);
+  p2Decision = p2Output(1,31:32);
  
   paddle1V = p1Decision(1,1) - p1Decision(1,2);
   paddle2V = p2Decision(1,1) - p2Decision(1,2);
