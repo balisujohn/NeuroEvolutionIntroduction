@@ -70,7 +70,7 @@ classdef NE
     
     function [Adj, W, thresh] = randTopology(size)
     %creates a random adjacency matrix
-    Adj =  zeros(size,size)%
+    Adj =  zeros(size,size);%
     for i = 1:size
         for c = 1:size
             if rand() > .9 && i ~= c
@@ -85,7 +85,7 @@ classdef NE
     end
 
     %creates weight matrix
-    W = rand(size,size) - .5 ;
+    W = (rand(size,size) - .5).*.1 ;
 
     %creates a random threshold vectors
     thresh = rand(size,1) - .5;
@@ -120,7 +120,7 @@ classdef NE
     
     
     function [newWeights, newAdj, newThresh] = neuronCountMutation(Adj, weights,  thresh, minSize)
-    if rand(1,1) < .25
+    if rand(1,1) < .8
     if rand(1,1) > .5
         newThresh = [thresh ; rand(1,1)] ;
         newWeights = [[weights zeros(size(weights,1), 1)];zeros(1,size(weights,1)+1)];
@@ -148,8 +148,8 @@ classdef NE
     for c = 1:size(Adj,1)
         for i = 1:size(Adj,1)
         AdjSum = sum(newAdj(:,c)');
-        if rand(1,1) > .9 && i ~= c 
-            if  rand(1,1) >.5 && AdjSum < 10
+        if rand(1,1) > .8 && i ~= c 
+            if  rand(1,1) >.5 && AdjSum < 5
                newAdj(i,c) = 1;
                newW(i,c) = rand(1,1);
             
@@ -168,7 +168,7 @@ classdef NE
       output = weights;
     for i = 1:size(weights,1)
         for c = 1:size(weights,1)
-        if rand(1,1) > .95 && i ~= c 
+        if rand(1,1) > .85 && i ~= c 
                output(i,c) = output(i,c) + ((rand(1,1) - .5)/10.0);
         end
         end

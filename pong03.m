@@ -559,7 +559,7 @@ paddle2 = [];
   end
   function result = evaluate(scoreLimit, trials, Adj, w, thresh)
         
-        counter = 0;
+        counter = 0.0;
         
         for t = 1:trials
             newGame;
@@ -657,7 +657,7 @@ paddle2 = [];
 % createFigure;
 
 [bestAdj, bestW, bestThresh]  =   NE.randTopology(32);   % NE.readFromFile();% 
-scoreLimit = 2000;
+scoreLimit = 1500;
 trials = 10;
 bestScore = evaluate(scoreLimit, trials*10, bestAdj, bestW, bestThresh)
 generation = 0;

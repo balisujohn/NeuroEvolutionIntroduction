@@ -3,14 +3,33 @@
 
 boardSize = 7;
 
-[Adj,W,thresh] = learnAvoidance(boardSize);
-demo(Adj,W,thresh,boardSize)
+%[Adj,W,thresh] = learnAvoidance(boardSize);
 
-function demo(Adj,W,thresh,boardSize)
+
+
+
+[Adj, W, thresh] = learnAvoidance(boardSize, 0, 20);
+demo(Adj,W,thresh,boardSize,0,50)
+[Adj, W, thresh] = learnAvoidance(boardSize, 0, 50);
+demo(Adj,W,thresh,boardSize,0,50)
+[Adj, W, thresh] = learnAvoidance(boardSize, 0, 200);
+demo(Adj,W,thresh,boardSize,0,50)
+[Adj, W, thresh] = learnAvoidance(boardSize, 0, 500);
+demo(Adj,W,thresh,boardSize,0,50)
+[Adj, W, thresh] = NE.readFromFile();
+demo(Adj,W,thresh,boardSize,0,50)
+
+
+
+
+
+
+function demo(Adj,W,thresh,boardSize,mode,timeLimit)
  [playerPos, hunterPos, playerDirection] = initMicroWorld(boardSize);
 output = zeros(1,8);
-   while 1
-       
+time = 0;
+   while 1 && (mode || time < timeLimit )
+       time = time+1;
         hunterPos = advanceHunter(playerPos, hunterPos);
         damage = 0;
         if isequal(hunterPos, playerPos)
@@ -38,13 +57,16 @@ output = zeros(1,8);
    end
 end
 
-function [Adj, W, thresh] = learnAvoidance(boardSize)
+function [Adj, W, thresh] = learnAvoidance(boardSize, mode, epochs)
     
     [Adj, W, thresh] = NE.randTopology(8);
     bestScore = 0;
-    %counter = 0
-    while bestScore < 100
-       % counter = counter + 1
+    gen = 0;
+    while (bestScore < 100 && mode) || (gen < epochs && ~mode)
+       gen = gen + 1;
+       if mod(gen,100) == 0
+           gen = gen
+       end
         
         [mAdj,mW,mThresh] = NE.mutate(Adj,W,thresh,8);
        
@@ -209,21 +231,10 @@ for i = 1:trials
             distance = (distance / abs(distance)) * 7;
         end
         
-%          damage = damage
-%          t0 = (dec2bin(distance))
-%          t1 = ((dec2bin(distance)) - '0')
-%          t2 = zeros(1,3)
-%         
         inputData = [1 damage (dec2bin(distance) - '0')]; % matlab is pretty cool
         input = NE.combine(output, inputData);
         
-       % for c = 1:5
          output = NE.advance(Adj,W, input, thresh)';
-%      %          output = output;
-%                input = input;
-       %        input = NE.combine( output, inputData);
-    %    end
-        
         decision = output(1,6:8);
        [playerPos, playerDirection] = movePlayer(playerPos,playerDirection,boardSize,decision);
         
