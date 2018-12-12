@@ -2,24 +2,77 @@
 function population = managePop(curr, mutVector)
     
     %Create a fitness score for each of the current members
-    fitness = zeros(size(curr,1),1); %Make a column the size of curr
-    breedingChances = zeros(size(curr,1),1);
+    popSize = size(curr,1);
+    fitness = zeros(popSize,1); %Make a column the size of curr
+    breedingChances = zeros(popSize,1);
+    totalFit = 0;
+    numTotalBreed = popSize;
     
-    for i = 1:size(curr,1)
+    for i = 1:popSize
         %TODO implement fitness function
-        fitness(i) = fitnessTest(curr(i));
-        breedingChances(i) = ceil(i/3);
+        currFit = fitnessTest(curr(i));
+        
+        %Keep track of individual fitness as well as total.
+        totalFit = totalFit + currFit;
+        fitness(i) = currFit;
     end
     
-    curr = [curr,fitness,breedingChances];
+    manager = [curr,fitness];
 
     %Create 'unfair' breeding - the top performant one gets most mating
     %Sort matrix by the fitness value
-    [~,id] = sort(curr(:,4));
-    curr = curr(id,:);
+    [~,id] = sort(manager(:,4));
+    manager = manager(id,:);
     
-   %TODO Manage population considering score/totalscore * breesize
-   %Then breed, fitness function those, and select top 10 from all. 
+   %TODO Manage population considering score/totalscore * breedsize
+   %Then breed, fitness function those, and select top 10 from all.
+   actualTotalBreed = 0;
+   for i = 1:popSize
+       breedTimes = ceil(manager(i,4) / totalFit * numTotalBreed);
+       actualTotalBreed = breedTimes + actualTotalBreed;
+   end
+   
+   %add on breeding chances to our array.
+   manager = [manager,breedingChances];
+   
+   %Use the breeding chances to calculate the children
+   population = zeros(actualTotalBreeding*2,4); 
+   %This is sized so that every breed will result in 2 children, 
+   %and every creature in the population will need it's genome + fitness
+   for i = 1:actualTotalBreed
+       %Select 2 things to breed
+       %Choose father
+       selected = false;
+       while(~selected) 
+           r = rand;
+           if(manager(ceil(r*popSize),5) > 0)
+               father = manager(ceil(r*popSize,:));
+               selected = true;
+               %Now has one less chance to breed
+               father(5) = father(5) - 1;
+           end
+       end
+       %find mother. I could add a function, but Its finals week and I just
+       %want this to work. 
+       selected = false;
+       while(~selected) 
+           r = rand;
+           if(manager(ceil(r*popSize),5) > 0)
+               mother = manager(ceil(r*popSize,:));
+               selected = true;
+               %Now has one less chance to breed
+               mother(5) = mother(5) - 1;
+           end
+       end
+       
+       [c1,c2] = crossover(mother, father, mutVector);
+       
+       %Add resultant to population matrix
+       population(i*2-1) = c1;
+       population(i*2) = c2;
+   end
+   
+   
     
     
     
