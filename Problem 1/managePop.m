@@ -11,7 +11,7 @@ function population = managePop(curr, mutVector)
 %% Fitness Calculation
     for i = 1:popSize
         %TODO implement fitness function
-        currFit = fitnessTest(curr(i));
+        currFit = fitnessTest(curr(i,:));
         
         %Keep track of individual fitness as well as total.
         totalFit = totalFit + currFit;
@@ -32,6 +32,7 @@ function population = managePop(curr, mutVector)
    for i = 1:popSize
        breedTimes = ceil(manager(i,4) / totalFit * numTotalBreed);
        actualTotalBreed = breedTimes + actualTotalBreed;
+       breedingChances(i) = breedTimes;
    end
    
    %add on breeding chances to our array.
@@ -39,7 +40,7 @@ function population = managePop(curr, mutVector)
 
 %% Create new Population
    %Use the breeding chances to calculate the children
-   population = zeros(actualTotalBreeding*2,4); 
+   population = zeros(actualTotalBreed*2,4); 
    %This is sized so that every breed will result in 2 children, 
    %and every creature in the population will need it's genome + fitness
    for i = 1:actualTotalBreed
@@ -49,7 +50,7 @@ function population = managePop(curr, mutVector)
        while(~selected) 
            r = rand;
            if(manager(ceil(r*popSize),5) > 0)
-               father = manager(ceil(r*popSize,:));
+               father = manager(ceil(r*popSize),:); 
                selected = true;
                %Now has one less chance to breed
                father(5) = father(5) - 1;
@@ -61,7 +62,7 @@ function population = managePop(curr, mutVector)
        while(~selected) 
            r = rand;
            if(manager(ceil(r*popSize),5) > 0)
-               mother = manager(ceil(r*popSize,:));
+               mother = manager(ceil(r*popSize),:);
                selected = true;
                %Now has one less chance to breed
                mother(5) = mother(5) - 1;
@@ -70,16 +71,16 @@ function population = managePop(curr, mutVector)
        
        [c1,c2] = crossover(mother, father, mutVector);
        
-       %Add resultant to population matrix
-       population(i*2-1) = c1;
-       population(i*2) = c2;
-       
+       %Add resultant to population matrix, with no fitness score.
+       population(i*2-1,:) = [c1,0];
+       population(i*2,:) = [c2,0];
+       %Seems to be a bug with choosing the right parents?!?
     
    end
    
 %% Calculate new pop fitness
-for i = 1:actualTotalBreeding
-        fitness(i) = fitnessTest(population(i));
+for i = 1:actualTotalBreed
+        fitness(i) = fitnessTest(population(i,:));
 end   
 
 %% Sort array by fitness
