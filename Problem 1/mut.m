@@ -1,11 +1,10 @@
 %mutVector will contain the [chanceToMutate, randMultiplier1,
-%randMultiplier2, randMultiplier3]
+%randMultiplier2, randMultiplier3]. Input will contain some individual, and
+%the output will be some individual. 
 function genome = mut(genome, mutVector)
-    %Set a hardcoded chance for something to mutate
-    mutChance = mutVector(1);
-    
-    %Mutate with a percent chance.
-    if(rand < mutChance)
+%% Mutate
+    if(rand < mutVector(1))
+        %If we are mutating, mutate one variable with equal chance.
         randomGene = rand;
         if(randomGene < (1/3))
             genome(1) = rand * mutVector(2);

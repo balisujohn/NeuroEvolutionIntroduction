@@ -1,14 +1,26 @@
-%We will input 2 arrays of size 3 that will have a genome of size 3, and
-%create two children. 
-
+%Have two vectors combine in a random order, simulating children from
+%parents. Input is two arrays and a vector that describes how mutation
+%works. Output is two arrays representing individuals. 
 function [c1, c2] = crossover(m, f, mutateVector)
-    %We will use a 3 genome for this
-    %The first will be speed, second will be jump chance, and third will be
-    %jump distance.
+%% Build the children matrix
+    c1 = zeros(1,3);
+    c2 = zeros(1,3);
     
-    %Create two children
-    c1 = mut([m(1), f(2), f(3)], mutateVector)
-    c2 = mut([f(1), m(2), m(3)], mutateVector)
+%% Randomly select parent
+    for i = 1:3
+        r = rand;
+        if(r > .5)
+           c1(i) = m(i);
+           c2(i) = f(i);
+        else
+           c1(i) = f(i);
+           c2(i) = m(i);
+        end
+    end
+    
+%% Mutate Children
+    c1 = mut(c1,mutateVector);
+    c2 = mut(c2,mutateVector);
    
     
     

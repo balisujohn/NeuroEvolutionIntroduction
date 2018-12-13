@@ -1,4 +1,4 @@
-%Generate an initial population to use
+%Generate an initial population that lies within the mutVectors range.
 function pop = popGen(mutVector, size)
 pop = zeros(size,3);
 
