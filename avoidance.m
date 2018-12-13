@@ -7,10 +7,10 @@ speed = .2;
 
 
 %%load from file mode
-%%[Adj, W, thresh] = NE.readFromFile();
+[Adj, W, thresh] = NE.readFromFile();
 
 %% train from scratch mode
-[Adj, W, thresh] = learnAvoidance(boardSize, 0,speed, epochs);
+%%[Adj, W, thresh] = learnAvoidance(boardSize, 0,speed, epochs);
 
 
 

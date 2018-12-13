@@ -10,7 +10,8 @@ function population = managePop(curr, mutVector)
     
 %% Fitness Calculation
     for i = 1:popSize
-        currFit = validation(curr(i,:));
+        validationResult = validation(curr(i,:));
+        currFit = validationResult(1);
         
         %Keep track of individual fitness as well as total.
         totalFit = totalFit + currFit;
@@ -92,7 +93,8 @@ function population = managePop(curr, mutVector)
    
 %% Calculate new pop fitness
 for i = 1:(actualTotalBreed*2)
-        population(i,4) = validation(population(i,:));
+        validationResult = validation(population(i,:));
+        population(i,4) = validationResult(1);
 end   
 
 %% Sort array by fitness

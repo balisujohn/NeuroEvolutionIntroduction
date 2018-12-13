@@ -11,7 +11,7 @@ t = tp(1:50);
 global y;
 y = yn(1:50);
 global duration;
-duration = 100;
+duration = 1000;
 %% Test 1 GOOD
 %Does the test produce feasible results during one iteration?
 %Success: Has a 6 in the final output, using test fitness function as the
@@ -48,7 +48,8 @@ sizeOfPop = 20;
 pop = popGen(mutVector, sizeOfPop);
 test4=pop;
 
-for i = 1:50
+for i = 1:500
     test4 = managePop(test4, mutVector);
 end
-
+test4 = test4
+[score,pos] = validation(test4(1,:))
