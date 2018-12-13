@@ -33,10 +33,33 @@ for i = 1:50
 end
 
 figure
+subplot(2,1,1);
 plot(t,y);
+title('Gradient Descent Result');
+xlim([0 0.05]);
 hold on;
 scatter(resx,res);
 hold off;
+
+u1 = unique(res);
+psize1 = size(u1);
+xx1 = zeros(1,psize1(2)); % occurances
+x1 = zeros(1,psize1(2)); % x-axis position
+for i = 1:psize1(2)
+    for j = 1:50
+        if(u1(i) == res(j))
+            xx1(i) = xx1(i) + 1;
+            x1(i) = resx(j);
+        end
+    end
+end
+
+Z1 = [x1' u1' xx1'];
+subplot(2,1,2);
+bar(x1,xx1);
+xlim([0 0.05]);
+title('Quantity of points at each corresponding location');
+colormap(jet);
 
 %% Genetic Algorithm (Simulated Anneling)
 resx2 = [1:50];
@@ -60,7 +83,30 @@ for i = 1:50
 end
 
 figure
+subplot(2,1,1);
 plot(t,y);
+xlim([0 0.05]);
 hold on;
 scatter(resx2,res2);
+title('Mutation Result');
 hold off;
+
+u = unique(res2);
+psize = size(u);
+xx = zeros(1,psize(2)); % occurances
+x = zeros(1,psize(2)); % x-axis position
+for i = 1:psize(2)
+    for j = 1:50
+        if(u(i) == res2(j))
+            xx(i) = xx(i) + 1;
+            x(i) = resx2(j);
+        end
+    end
+end
+
+Z = [x' u' xx'];
+subplot(2,1,2);
+bar(x,xx);
+xlim([0 0.05]);
+title('Quantity of points at each corresponding location');
+colormap(jet);
