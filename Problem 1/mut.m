@@ -1,8 +1,9 @@
 %mutVector will contain the [chanceToMutate, randMultiplier1,
 %randMultiplier2, randMultiplier3]. Input will contain some individual, and
 %the output will be some individual. 
-function genome = mut(genome, mutVector)
+function genome = mut(genome)
 %% Mutate
+global mutVector;
     if(rand < mutVector(1))
         %If we are mutating, mutate one variable with equal chance.
         randomGene = rand;

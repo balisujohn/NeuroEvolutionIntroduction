@@ -19,8 +19,8 @@ function [c1, c2] = crossover(m, f, mutateVector)
     end
     
 %% Mutate Children
-    c1 = mut(c1,mutateVector);
-    c2 = mut(c2,mutateVector);
+    c1 = mut(c1);
+    c2 = mut(c2);
    
     
     
