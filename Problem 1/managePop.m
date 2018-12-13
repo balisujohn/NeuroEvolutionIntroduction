@@ -6,7 +6,7 @@ function population = managePop(curr, mutVector)
     fitness = zeros(popSize,1); %Make a column the size of curr
     breedingChances = zeros(popSize,1);
     totalFit = 0;
-    numTotalBreed = popSize;
+    numTotalBreed = popSize * 2;
     
 %% Fitness Calculation
     for i = 1:popSize
@@ -71,6 +71,10 @@ function population = managePop(curr, mutVector)
        
        [c1,c2] = crossover(mother, father, mutVector);
        
+       family = zeros(4,5)
+       family(1:2,:) = [mother;father];
+       family(3:4,1:3) = [c1;c2];
+       
        %Add resultant to population matrix, with no fitness score.
        population(i*2-1,:) = [c1,0];
        population(i*2,:) = [c2,0];
@@ -79,8 +83,8 @@ function population = managePop(curr, mutVector)
    end
    
 %% Calculate new pop fitness
-for i = 1:actualTotalBreed
-        fitness(i) = fitnessTest(population(i,:));
+for i = 1:(actualTotalBreed*2)
+        population(i,4) = fitnessTest(population(i,:));
 end   
 
 %% Sort array by fitness
@@ -89,7 +93,9 @@ population = population(id,:);
 
 %% Split off fitness score return top X perfomers
 %The 3 comes from the size of the genome. 
-population = population(1:popSize,1:3);
+population = population(actualTotalBreed*2-popSize:actualTotalBreed*2,1:3);
+%want the performers on the bottom so...
+%do actualTotalBreed*2-popSize -> actualTotalBreed
     
     
     
