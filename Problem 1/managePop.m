@@ -8,6 +8,7 @@ function population = managePop(curr, mutVector)
     totalFit = 0;
     numTotalBreed = popSize;
     
+%% Fitness Calculation
     for i = 1:popSize
         %TODO implement fitness function
         currFit = fitnessTest(curr(i));
@@ -18,12 +19,13 @@ function population = managePop(curr, mutVector)
     end
     
     manager = [curr,fitness];
-
+%% Sort by Fitness
     %Create 'unfair' breeding - the top performant one gets most mating
     %Sort matrix by the fitness value
     [~,id] = sort(manager(:,4));
     manager = manager(id,:);
-    
+
+%% Calculate breed amount based on fitness
    %TODO Manage population considering score/totalscore * breedsize
    %Then breed, fitness function those, and select top 10 from all.
    actualTotalBreed = 0;
@@ -34,7 +36,8 @@ function population = managePop(curr, mutVector)
    
    %add on breeding chances to our array.
    manager = [manager,breedingChances];
-   
+
+%% Create new Population
    %Use the breeding chances to calculate the children
    population = zeros(actualTotalBreeding*2,4); 
    %This is sized so that every breed will result in 2 children, 
@@ -70,9 +73,22 @@ function population = managePop(curr, mutVector)
        %Add resultant to population matrix
        population(i*2-1) = c1;
        population(i*2) = c2;
+       
+    
    end
    
-   
+%% Calculate new pop fitness
+for i = 1:actualTotalBreeding
+        fitness(i) = fitnessTest(population(i));
+end   
+
+%% Sort array by fitness
+[~,id] = sort(population(:,4));
+population = population(id,:);
+
+%% Split off fitness score return top X perfomers
+%The 3 comes from the size of the genome. 
+population = population(1:popSize,1:3);
     
     
     
