@@ -2,45 +2,45 @@
 
 
 boardSize = 7;
-
-%[Adj,W,thresh] = learnAvoidance(boardSize);
-
-
+epochs = 100;
+speed = .2;
 
 
-[Adj, W, thresh] = learnAvoidance(boardSize, 0, 20);
-demo(Adj,W,thresh,boardSize,0,50)
-[Adj, W, thresh] = learnAvoidance(boardSize, 0, 50);
-demo(Adj,W,thresh,boardSize,0,50)
-[Adj, W, thresh] = learnAvoidance(boardSize, 0, 200);
-demo(Adj,W,thresh,boardSize,0,50)
-[Adj, W, thresh] = learnAvoidance(boardSize, 0, 500);
-demo(Adj,W,thresh,boardSize,0,50)
-[Adj, W, thresh] = NE.readFromFile();
-demo(Adj,W,thresh,boardSize,0,50)
+%%load from file mode
+%%[Adj, W, thresh] = NE.readFromFile();
+
+%% train from scratch mode
+[Adj, W, thresh] = learnAvoidance(boardSize, 0,speed, epochs);
+
+
+
+%% display behavior of resulting network
+demo(Adj,W,thresh,boardSize,speed,1,0)
 
 
 
 
 
 
-function demo(Adj,W,thresh,boardSize,mode,timeLimit)
+
+
+function demo(Adj,W,thresh,boardSize,speed,mode,timeLimit)
  [playerPos, hunterPos, playerDirection] = initMicroWorld(boardSize);
 output = zeros(1,8);
 time = 0;
    while 1 && (mode || time < timeLimit )
        time = time+1;
-        hunterPos = advanceHunter(playerPos, hunterPos);
+        hunterPos = advanceHunter(playerPos, hunterPos,speed);
         damage = 0;
         if isequal(hunterPos, playerPos)
         damage = 1;
         end
-        distance = distanceToWallOrHunter(playerPos,hunterPos,playerDirection,boardSize)
+        distance = distanceToWallOrHunter(playerPos,hunterPos,playerDirection,boardSize);
         if abs(distance) > 7
             distance = (distance / abs(distance)) * 7;
         end
       
-        inputData = [1 damage (dec2bin(distance) - '0')] % matlab is pretty cool
+        inputData = [1 damage (dec2bin(distance) - '0')]; % matlab is pretty cool
         input = NE.combine(output, inputData);
         
       
@@ -48,7 +48,7 @@ time = 0;
                
        
         
-        decision = output(1,6:8)
+        decision = output(1,6:8);
         [playerPos, playerDirection] = movePlayer(playerPos,playerDirection,boardSize,decision);
          
         visualizeBoard(playerPos, playerDirection, hunterPos, boardSize)
@@ -57,7 +57,7 @@ time = 0;
    end
 end
 
-function [Adj, W, thresh] = learnAvoidance(boardSize, mode, epochs)
+function [Adj, W, thresh] = learnAvoidance(boardSize, mode, speed,epochs)
     
     [Adj, W, thresh] = NE.randTopology(8);
     bestScore = 0;
@@ -72,7 +72,7 @@ function [Adj, W, thresh] = learnAvoidance(boardSize, mode, epochs)
        
              
        
-        score = evaluateAvoidance(mAdj, mW, mThresh,boardSize);
+        score = evaluateAvoidance(mAdj, mW, mThresh,boardSize,speed);
         
         if score > bestScore
         Adj = mAdj;
@@ -94,7 +94,7 @@ directions = ['>','v','<','^'];
 display = zeros(boardSize, boardSize);
 x = hunterPos(1)
 y = hunterPos(2)
-display(hunterPos(1), hunterPos(2)) = 1;
+display(hunterPos(1), hunterPos(2)) = 7;
 display(playerPos(1),playerPos(2)) = playerDirection
 end
 
@@ -104,9 +104,9 @@ hunterPos = randi([1,boardSize],2,1);
 playerDirection = randi([1,4]);
 end
 
-function newHunterPos = advanceHunter(playerPos, hunterPos)
+function newHunterPos = advanceHunter(playerPos, hunterPos,speed)
 newHunterPos = hunterPos;
-if rand() > .8
+if rand() < speed
     travelDirection = playerPos - hunterPos;
     
         if abs(abs(travelDirection(1)) > abs(travelDirection(2)) && travelDirection(1))
@@ -207,7 +207,7 @@ end
 
 end
 
-function score = evaluateAvoidance(Adj, W, thresh,boardSize)
+function score = evaluateAvoidance(Adj, W, thresh,boardSize,speed)
 [playerPos, hunterPos, playerDirection] = initMicroWorld(boardSize);
 maxTime = 1000.0;
 trials = 100.0;
@@ -220,7 +220,7 @@ for i = 1:trials
     while (time < maxTime) && (health > 0)
         time = time + 1;
         score = score +1;
-        hunterPos = advanceHunter(playerPos, hunterPos);
+        hunterPos = advanceHunter(playerPos, hunterPos,speed);
         damage = 0;
         if isequal(hunterPos, playerPos)
         damage = 1;
