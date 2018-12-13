@@ -7,6 +7,8 @@ t = tp(1:50);
 y = yn(1:50);
 
 %% Gradient Descent Algorithm for 2D Graph
+% Additional information can be found at
+% https://www.geeksforgeeks.org/introduction-hill-climbing-artificial-intelligence/
 resx = [1:50];
 res = [1:50];
 N = 50;
@@ -62,6 +64,8 @@ title('Quantity of points at each corresponding location');
 colormap(jet);
 
 %% Genetic Algorithm (Simulated Anneling)
+% Additional information can be found at 
+% http://mathworld.wolfram.com/SimulatedAnnealing.html
 resx2 = [1:50];
 res2 = [1:50];
 N = 50;
