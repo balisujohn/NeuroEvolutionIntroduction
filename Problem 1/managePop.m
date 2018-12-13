@@ -101,7 +101,7 @@ population = population(id,:);
 
 %% Split off fitness score return top X perfomers
 %The 3 comes from the size of the genome. 
-population = population(actualTotalBreed*2-popSize:actualTotalBreed*2,1:3);
+population = population(actualTotalBreed*2-popSize+1:actualTotalBreed*2,1:3);
 %want the performers on the bottom (highest fitness) so...
 %do actualTotalBreed*2-popSize -> actualTotalBreed
     

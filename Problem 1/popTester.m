@@ -37,7 +37,7 @@ size = 20;
 pop = popGen(mutVector, size);
 test4=pop;
 
-for i = 1:10
+for i = 1:50
     test4 = managePop(test4, mutVector);
 end
 
