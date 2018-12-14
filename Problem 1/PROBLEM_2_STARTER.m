@@ -28,9 +28,9 @@ MUTANT_CHILDREN(2,:) = mut(CHILDREN(2,:));
 %% Code for part c)
 %MutVector format is:
 %[mutationChance, maxSpeed, maxJumpProbability, MaxJumpDistance]
-mutVector = [.2, 5,1,10];
+mutVector = [.05, 5,1,10];
 popSize = 20;
-runTimes = 10;
+runTimes = 50;
 parents = popGen(mutVector, popSize);
 
 fitness = zeros(runTimes,1);
@@ -47,6 +47,41 @@ for i = 1:runTimes
     %Create the next generation of kids
     parents = managePop(parents, mutVector);
 end
- %Graph the parents on the graph. 
+
+%Graph the parents on the graph. 
+figure
+subplot(2,1,1);
+plot(t,y);
+title('INSERT NAME OF PLOT');
+xlim([0 0.05]);
+hold on;
+positionIndex = zeros(1,popSize);
+xVals = zeros(1,popSize);
+yVals = zeros(1,popSize);
+for i = 1:popSize
+    [score,positionIndex(i)] = validation(parents(i,:));
+    yVals(i) = y(positionIndex(i));
+    xVals(i) = t(positionIndex(i));
+end
+scatter(xVals, yVals);
+hold off;
+
+u1 = unique(yVals);
+psize1 = size(u1);
+xx1 = zeros(1,psize1(2)); % occurances
+x1 = zeros(1,psize1(2)); % x-axis position
+for i = 1:psize1(2)
+    for j = 1:popSize
+        if(u1(i) == yVals(j))
+            xx1(i) = xx1(i) + 1;
+            x1(i) = xVals(j);
+        end
+    end
+end
+subplot(2,1,2);
+bar(x1,xx1);
+xlim([0 0.05]);
+title('INSERT NAME HERE');
+colormap(jet);
 
 
