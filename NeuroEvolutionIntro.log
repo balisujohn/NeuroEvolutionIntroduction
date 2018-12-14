@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6300 64-bit) (preloaded format=pdflatex 2017.9.16)  13 DEC 2018 20:11
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6300 64-bit) (preloaded format=pdflatex 2017.9.16)  13 DEC 2018 20:23
 entering extended mode
 **./NeuroEvolutionIntro.tex
 (NeuroEvolutionIntro.tex
@@ -255,7 +255,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 46--47
 
  []
 
-[2] [3] (NeuroEvolutionIntro.bbl) [4] (NeuroEvolutionIntro.aux) ) 
+[2]
+Underfull \hbox (badness 10000) in paragraph at lines 53--61
+
+ []
+
+[3] (NeuroEvolutionIntro.bbl) [4] (NeuroEvolutionIntro.aux) ) 
 Here is how much of TeX's memory you used:
  2805 strings out of 493320
  39818 string characters out of 3138960
@@ -264,14 +269,14 @@ Here is how much of TeX's memory you used:
  10150 words of font info for 38 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  39i,6n,25p,1354b,193s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Program Fi
-les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Program Files/MiKT
-eX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files/MiKTeX 2.9/f
-onts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type
-1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/
-amsfonts/cm/cmr17.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/
-cm/cmti10.pfb>
-Output written on NeuroEvolutionIntro.pdf (4 pages, 90477 bytes).
+<C:/Program Files/
+MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Program Files/MiKTeX 2
+.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files/MiKTeX 2.9/fonts
+/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/pu
+blic/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsf
+onts/cm/cmr17.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/c
+mti10.pfb>
+Output written on NeuroEvolutionIntro.pdf (4 pages, 91345 bytes).
 PDF statistics:
  39 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

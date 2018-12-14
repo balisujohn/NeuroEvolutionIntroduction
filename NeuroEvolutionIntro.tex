@@ -48,9 +48,20 @@ Explain why a mutation (simulated annealing) algorithm may outperform a simple g
 
 \section{Neuro-Evolution}
 \textbf{Background} \\
+Historically, it has been less popular to train neural networks by mutation, as it can take a lot of computing power to arrive at good solutions this way. With the increase in available computing power, It has become more feasible to train neural networks via natural selection, preserving genotypes that result in good performance on some task, and throwing out genotypes that perform poorly. 
+
+The algorithm we demonstrate in this activity works as follows: \\
+\\
+1.Create a random starting network with very few nodes and connections.\\ 
+2.Test it to see how well it performs. \\
+3.Create a mutated copy. \\
+4.Test the copy to determine its score. \\
+5.Replace the original with the copy if the copy gets a higher score.\\
+6.Repeat this process
+
 In this section, we will use the example of an agent trapped in a grid with a nondeterministic hunter as an example of how a naive genetic algorithm using neuro-evolution can learn intelligent behaviors. The 'world' is be displayed as a matrix with the hunter represented as a 7 and the agent represented as a value between 1 and 4 inclusive. This number indicates the direction the agent is facing: 1 being to the right, 2 being down, and so on. At each frame of time, the agent is given only the distance to the nearest object or wall in front of it, and whether or not the hunter is currently 'attacking' it. The hunter always advances towards the player at each from of time with a probability corresponding to the agent can move in it's cardinal directions, turn, or strafe. Agents who avoid the hunter for the longest are selected for by the algorithm. 
 
-Unlike the previous example, the model being mutated in this case is a spiking neural network(SNN) rather than gradient descent parameters. The structure of the SNN is not covered in this lesson, but knowledge of the SNN's structure is not assumed or necessary to understand the activity. The algorithm we are using is a vastly simplified version of the algorithm used in \cite{Stanley}(We do not employ crossover or keep track of 'innovation' numbers)
+Unlike the previous example, the model being mutated in this case is a spiking neural network(SNN) rather than a set of gradient descent parameters. The structure of the SNN is not covered in this lesson, but knowledge of the SNN's structure is not assumed or necessary to understand the activity. The algorithm we are using is a vastly simplified version of the algorithm used in \cite{Stanley}(We do not employ crossover or keep track of 'innovation' numbers)
 \subsection{A}
 Run avoidance.m with 100, 200, 500, and 1000 epochs.  What differences do you observe in the behavior of the agents with respect to the number of training epochs? Don't be alarmed if you don't see any particularly intelligent behaviors.
 \subsection{B}
