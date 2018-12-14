@@ -6,14 +6,15 @@ global y;
 global duration;
 
 lowest = 3;
-pos = 1;
+pos = ceil(rand * 50);
+bestPos = pos;
 for i = 1:duration
     speed = genotype(1);
     jumpChance  = genotype(2);
     jumpDistance = genotype(3);
     if pos < 50
         gradient = y(pos + 1) - y(pos);
-        pos = floor(pos - (gradient * speed));
+        pos = ceil(pos - (gradient * speed));
     elseif pos > 1
         gradient = y(pos) - y(pos-1);
         pos = floor(pos - (gradient * speed));
@@ -28,6 +29,7 @@ for i = 1:duration
     assert(pos >0 && pos < 51)
     if y(pos) < lowest
         lowest = y(pos);
+        bestPos = pos;
     end
     
     
@@ -40,6 +42,8 @@ if isnan(result) || isinf(result)
     out = result
 end
 assert(result > 0)
+
+pos  =bestPos;
 
 end
 
