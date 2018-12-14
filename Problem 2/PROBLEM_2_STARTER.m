@@ -1,3 +1,17 @@
+%% Variables you can play around with
+% Look below for how to set up A) and B)
+
+%Here are things to set up for 2 if you want to play around
+chanceToMutate = .04; %Between 0 and 1 as it is a probability
+maxSpeed = 3; %50 is MAX possible
+maxJumpChance = 1; %Between 0 and 1 as it is a probability
+maxJumpDistance = 10; %50 is MAX possible
+mutateVector = [chanceToMutate,maxSpeed, maxJumpChance, maxJumpDistance];
+
+epochs = 30;
+populationSize = 30;
+
+
 %% Setting up global variables
 global mutVector;
 close all;
@@ -28,9 +42,9 @@ MUTANT_CHILDREN(2,:) = mut(CHILDREN(2,:));
 %% Code for part c)
 %MutVector format is:
 %[mutationChance, maxSpeed, maxJumpProbability, MaxJumpDistance]
-mutVector = [.05, 2.5,1,10];
-popSize = 25;
-runTimes = 50;
+mutVector = mutateVector;
+popSize = populationSize;
+runTimes = epochs;
 starter = popGen(mutVector, popSize);
 parents = starter;
 
