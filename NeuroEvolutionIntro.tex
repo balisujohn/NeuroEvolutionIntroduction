@@ -5,6 +5,7 @@
 \usepackage{graphicx}
 \usepackage{amsfonts}
 \usepackage{algpseudocode}
+\usepackage{cite}
 
 \begin{document}
 
@@ -45,9 +46,9 @@ Explain why a mutation (simulated annealing) algorithm may outperform a simple g
 
 \section{Neuro-Evolution}
 \textbf{Background} \\
-In this section, we will use the example of an agent trapped in a grid with a nondeterministic hunter as an example of how a naive genetic algorithm using neuro-evolution can learn intelligent behaviors. The 'world' is be displayed as a matrix with the hunter represented as a 7 and the agent represented as a value between 1 and 4 inclusive. This number indicates the direction the agent is facing: 1 being to the right, 2 being down, and so on. At each frame of time, the agent is given only the distance to the nearest object or wall in front of it, and whether or not the hunter is currently 'attacking' it. The hunter always advances towards the player at each from of time with a probability correspodnding to  The agent can move in it's cardinal directions, turn, or strafe. Agents who avoid the hunter for the longest are selected for by the algorithm. 
+In this section, we will use the example of an agent trapped in a grid with a nondeterministic hunter as an example of how a naive genetic algorithm using neuro-evolution can learn intelligent behaviors. The 'world' is be displayed as a matrix with the hunter represented as a 7 and the agent represented as a value between 1 and 4 inclusive. This number indicates the direction the agent is facing: 1 being to the right, 2 being down, and so on. At each frame of time, the agent is given only the distance to the nearest object or wall in front of it, and whether or not the hunter is currently 'attacking' it. The hunter always advances towards the player at each from of time with a probability corresponding to the agent can move in it's cardinal directions, turn, or strafe. Agents who avoid the hunter for the longest are selected for by the algorithm. 
 
-Unlike the previous example, the model being mutated in this case is a spiking neural network(SNN) rather than gradient descent parameters. The structure of the SNN is not covered in this lesson, but knowledge of the SNN's structure is not assumed or necessary to understand the activity. 
+Unlike the previous example, the model being mutated in this case is a spiking neural network(SNN) rather than gradient descent parameters. The structure of the SNN is not covered in this lesson, but knowledge of the SNN's structure is not assumed or necessary to understand the activity. The algorithm we are using is a vastly simplified version of the algorithm used in \cite{Stanley}
 \subsection{A}
 Run avoidance.m with 100, 200, 500, and 1000 epochs.  What differences do you observe in the behavior of the agents with respect to the number of training epochs? Don't be alarmed if you don't see any particularly intelligent behaviors.
 \subsection{B}
@@ -58,10 +59,8 @@ Next we can modify some of the simulation parameters and observe the effects on 
 
   
 
-
-\section{Works Cited}
-
-
+\bibliography{NeuroEvolutionIntro}{}
+\bibliographystyle{plain}
 
 
 \end{document}
