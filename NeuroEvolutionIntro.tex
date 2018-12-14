@@ -27,10 +27,12 @@ In this activity, we will build up to neuro-evolution by looking at the essentia
 
 \section{Simulated Annealing}
 \textbf{Background} \\
-In problem 1 we will showcase a comparison between traditional Gradient Descent algorithm and a mutation based algorithm. For simplicity of visualization, we’ve created a simulation of these algorithms using a traditional hill climbing approach and a simulated annealing approach. 
-Please note that you are not required to have any previous knowledge about these two algorithms.
+In problem 1 we will showcase a comparison between traditional Gradient Descent algorithm and a mutation based algorithm. For simplicity of visualization, we’ve created a simulation of these algorithms using a traditional hill climbing approach and a simulated annealing approach.
 
- TODO: explain simulated annealing
+Simulated Annealing is a probabilistic machine learning technique used for solving for the global maximum/minimum for a provided function or search space. Inspiration for the technique is derived from annealing from metallurgy, thus its given name simulated annealing. We used this methodology due to its classification as meta-heuristics. Critically, we will use the non-deterministic properties, defined within a traditional simulated annealing algorithm, to showcase what a mutation within genetic algorithms seeks to achieve.
+
+The function used to calculate the acceptance probability is shown below. Please note that you are not required to understand the following formula or have any previous knowledge regarding simulated annealing or hill climbing, we are simply giving you additional information if you wish to explore further. Additionally, note that links have been provided both in the source code and the work cited in you wish to learn more about each methodology.
+
 
 
 Download the given mutation.m code and run mutation.m.
@@ -58,6 +60,7 @@ Run avoidance.m in readFromFile mode. Make sure 'bestAdj.csv', 'bestW.csv', and 
 Next we can modify some of the simulation parameters and observe the effects on learning as well as the pre-trained network. Set speed from .2 to .4. Repeat part A and B with speed at .8. Optionally try changing the board size as well. Is there a change in the behavior of the pre-trained network? Is there a change in the behavior of the networks you are training? Hypothesize about what your observations mean when it comes to designing training simulations for neuro-evolution.
 
   
+
 
 \bibliography{NeuroEvolutionIntro}{}
 \bibliographystyle{plain}
