@@ -20,16 +20,17 @@
 In this activity, we will build up to neuro-evolution by looking at the essential components, culminating in a activity showcasing the ability of neuro-evolution to create intelligent agents. The first objective is to learn about the potential value of nondeterminism. This forms the basis for genetic algorithms which in turn form the basis for neuro-evolution. For our first activity, we illustrate the differences between simple gradient descent and simulated annealing to provide a motivation for the use of nondeterminism.By the end of this sections, learners should understand simulated annealing, and why nondeterminism is sometimes useful in learning algorithm design. From here, we present a simple genetic algorithm, training on the same problem. By the end of this excercise, learners should feel comfortable with the concepts of mutation and crossover, as they apply to genetic programming, and have a general understanding of how to structure a genetic algorithm. In the final section, we highlight some of the pitfalls of the neuro-evolution process, including training time and reliability, while also showcasing the potential of genetic algorithms to create intelligent agents. By the end of this section, learners should have an appreciate for both the difficulties and potential power of genetic algorithms!
 
 
-\section{Background}
 
 
 
 
-
-
-\section{}
+\section{Simulated Annealing}
+\textbf{Background} \\
 In problem 1 we will showcase a comparison between traditional Gradient Descent algorithm and a mutation based algorithm. For simplicity of visualization, we’ve created a simulation of these algorithms using a traditional hill climbing approach and a simulated annealing approach. 
-Please note that you are not required to have any previous knowledge about these two algorithms however, if interested, we’ve provided links in the matlab source code if you are interested in learning about these algorithms. 
+Please note that you are not required to have any previous knowledge about these two algorithms.
+
+ TODO: explain simulated annealing
+
 
 Download the given mutation.m code and run mutation.m.
 \subsection{}
@@ -38,20 +39,27 @@ Figure 1 showcases a gradient descent algorithm with 50 different starting locat
 Figure 2 showcases a mutation based algorithm with 50 different starting locations on the graph. The bottom graph showcases how many points are stacked ontop of the corresponding location in the top graph. Do more of the 50 points end up in the global minimum. If so, why do you think they reach the global minimum more often.
 \subsection{}
 Explain why a mutation (simulated annealing) algorithm may outperform a simple gradient descent algorithm?
+\section{Mutation and Speciation}
+\textbf{Background} \\
 
 
-\section{}
-In this section, we will use the example of an agent trapped in a grid with a nondeterministic hunter as an example of how neuro-evolution can learn intelligent behaviors. The 'world' be be displayed as a matrix with the hunter represented as a 7 and the agent represented as a value between 1 and 4 inclusive. This number indicates the direction the agent is facing: 1 being to the right, 2 being down, and so on. At each frame of time, the agent is given only the distance to the nearest object or wall in front of it, and whether or not the hunter is currently 'attacking' it. The agent can move in it's cardinal directions, turn, or strafe. Agents who avoid the hunter are selected for by the algorithm, as they tend to survive.
+\section{Neuro-Evolution}
+\textbf{Background} \\
+In this section, we will use the example of an agent trapped in a grid with a nondeterministic hunter as an example of how a naive genetic algorithm using neuro-evolution can learn intelligent behaviors. The 'world' is be displayed as a matrix with the hunter represented as a 7 and the agent represented as a value between 1 and 4 inclusive. This number indicates the direction the agent is facing: 1 being to the right, 2 being down, and so on. At each frame of time, the agent is given only the distance to the nearest object or wall in front of it, and whether or not the hunter is currently 'attacking' it. The agent can move in it's cardinal directions, turn, or strafe. Agents who avoid the hunter for the longest are selected for by the algorithm. 
+
+Unlike the previous example, the model being mutated in this case is a spiking neural network(SNN) rather than gradient descent parameters. The structure of the SNN is not covered in this lesson, but knowledge of the SNN's structure is not assumed or necessary to understand the activity. 
 \subsection{A}
 Run avoidance.m with 100, 200, 500, and 1000 epochs.  What differences do you observe in the behavior of the agents with respect to the number of training epochs? Don't be alarmed if you don't see any particularly intelligent behaviors.
 \subsection{B}
-Run avoidance.m in readFromFile mode. Make sure 'bestAdj.csv', 'bestW.csv', and 'bestThresh.csv' are in the same directory. The network specified by these files was trained until it reached an average performance of 950 frames of time survival. How does the behavior of this network compare to that of the networks you trained in part A?
+Run avoidance.m in readFromFile mode. Make sure 'bestAdj.csv', 'bestW.csv', and 'bestThresh.csv' are in the same directory. The network specified by these files was trained until it reached an average performance of 950 frames of time survived. How does the behavior of this network compare to that of the networks you trained in part A?
 
 \subsection{C}
 Next we can modify some of the simulation parameters and observe the effects on learning as well as the pre-trained network. Set speed from .2 to .4. Repeat part A and B with speed at .8. Optionally try changing the board size as well. Is there a change in the behavior of the pre-trained network? Is there a change in the behavior of the networks you are training? Hypothesize about what your observations mean when it comes to designing simulations for neuro-evolution.
 
   
 
+
+\section{Works Cited}
 
 
 
