@@ -63,7 +63,7 @@ In this section, we will use the example of an agent trapped in a grid with a no
 
 Unlike the previous example, the model being mutated in this case is a spiking neural network(SNN) rather than a set of gradient descent parameters. The structure of the SNN is not covered in this lesson, but knowledge of the SNN's structure is not assumed or necessary to understand the activity. The algorithm we are using is a vastly simplified version of the algorithm used in \cite{Stanley}(We do not employ crossover or keep track of 'innovation' numbers)
 \subsection{A}
-Run avoidance.m with 100, 200, 500, and 1000 epochs.  What differences do you observe in the behavior of the agents with respect to the number of training epochs? Don't be alarmed if you don't see any particularly intelligent behaviors.
+Run avoidance.m with 100, 200, 500, and 1000 epochs. Note you will need manually terminate the program when you are done observing the visualization.  What differences do you observe in the behavior of the agents with respect to the number of training epochs? Don't be alarmed if you don't see any particularly intelligent behaviors.
 \subsection{B}
 Run avoidance.m in readFromFile mode. Make sure 'bestAdj.csv', 'bestW.csv', and 'bestThresh.csv' are in the same directory. The network specified by these files was trained until it reached an average performance of 950 frames of time survived. How does the behavior of this network compare to that of the networks you trained in part A?
 

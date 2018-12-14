@@ -1,5 +1,15 @@
 \begin{thebibliography}{1}
 
+\bibitem{Gnanachandran}
+Gnanachandran.
+\newblock Using simulated annealing to solve logic puzzles.
+\newblock 2016.
+
+\bibitem{Nahar}
+Surendra Nahar, Sartaj Sahni, and Eugene Shragowitz.
+\newblock Simulated annealing and combinatorial optimization.
+\newblock pages 293--299, 1986.
+
 \bibitem{Stanley}
 Kenneth~O. Stanley and Risto Miikkulainen.
 \newblock Evolving neural networks through augmenting topologies.
