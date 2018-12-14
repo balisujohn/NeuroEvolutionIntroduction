@@ -41,28 +41,35 @@ Possible observations:
 
 \section{Mutation and Speciation}
 
+\subsection{}
+The children are part of the parents, the first part of the a child is one parent, and the next two are the other.  A reasonable child would be [1,.1,5] or [2,.5,3]
+\subsection{}
+These ones have one value that are now a random value compared to the other children, even though they are from the same parents
+\subsection{}
+Fitness function looks to accurately model some part of the real problem, which is a gradient descent solver over things with multiple minima. Children on average perform much better than the parents. 
+\subsection{}
+Genetic algorithm outperforms initial parents.  It is an effective way to get out of local minima, however it takes a lot of computing power to create these agents, especially as population size increases.  PROS: avoids local minima well CONS: computing time/power. 
+
+
 
 \section{Neuro-Evolution}
-\subsection{A}
+\subsection{}
 Possible observations: 
 
-1.none of the training runs resulted in significant survival time
-2. One or more training run resulted in signficant survival time, and can be seen to exhibit intelligent some sort of behavior with the intent of avoiding the hunter. 
+Either none of the training runs results in significant survival time
+or one or more training run results in signficant survival time, and can be seen to exhibit intelligent some sort of behavior with the intent of avoiding the hunter. 
 
 It's important to note that neuro-evolution is very unpredictable, and may fail to find a good solution even after a very long time. However, running a given training run for longer can only improve the performance of the network.
 
 
-\subsection{B}
+\subsection{}
  You should observe that the sample network has a very effective a deliberate style of avoiding the hunter. All successful SSNs we have trained have employed a variant of this style. It's important to note that while is no upper bound on how long it takes to train a network to this quality and we could not leave it's generation as an excercise, it is possible to train a network to this quality in even 1000 or fewer epochs. 
 
 
-\subsection{C}
+\subsection{}
 
-Possible Obervations:
+You will likely observe that the best score is worse for the agents trained from scratch than when training with a hunter speed of .2.  The pre-trained agent should perform similarly with both speeds. The takeaway here is that sometimes it is useful to initially reduce the difficult of training simulations and gradually increase difficulty as performance increases. 
 
-
-
-\section{Works Cited}
 
 
 
