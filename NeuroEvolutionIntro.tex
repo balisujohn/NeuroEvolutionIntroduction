@@ -49,21 +49,22 @@ Explain why a mutation (simulated annealing) algorithm may outperform a simple g
 \section{Basics of Genetic Algorithms}
 \textbf{Background} \\
 
-The motivation for this rests in nature where individuals evolve based on reproduction and a small chance for mutation. Our program attempts to mimic that. Each thing can be modeled as a genome that stores variables that represent certain properties.  For example in our genome is described by
+The motivation for this rests in nature where individuals evolve based on reproduction and a small chance for mutation. \cite{CS540} Our program attempts to mimic that. Each thing can be modeled as a genome that stores variables that represent certain properties.  For example in our genome is described by
 (SPEED OF DESCENT  ,  CHANCE OF JUMP,JUMP DISTANCE)
 
 \subsection{}
- Run the program in PROBLEM\_2\_STARTER.m.  To mimic reproduction, we will use sexual reproduction between two parents that will mix their genome to create children. After the program has terminated, look at the PARENT and CHILDREN variables.  How do they compare?  What would a reasonable child be given the parents (1,.5,3), (2,.1,5)?
+ Run the program in PROBLEM\_2\_STARTER.m.  To mimic reproduction, we will use sexual reproduction between two parents that will mix their genome to create children. After the program has terminated, look at the PARENT and CHILDREN variables.  How does reproducing use the parents genome to create the children's?  What would a reasonable child be given the parents (1,.5,3), (2,.1,5)?
 
 \subsection{}
-With a small chance we will mutate. When the program has terminated, look at the variable MUTANT\_CHILDREN.  How do these compare to the last children and parents?
+With a small chance we will mutate. When the program has terminated, look at the variable MUTANT\_CHILDREN.  How do these compare to the last children and parents? Is one of the genes mutated to a new random value?
 
 \subsection{}
 Note the avg fitness scores throughout generations. This is due to only the top performers being selected each generation from a fitness score.  For our fitness function, we define the individuals that can find the lowest minima on a graph the most fit.
 
-Look at the first graph.  The 1st graph is where all of the parents land on the graph. Compare this to the 2nd graph where children that are run after 50 generations of breeding. Do the children perform better than the parents?
+Look at the graphs.  The graph labeled 'starter' will contain how random points do with the non-genetic simulated annealing.  The graph labeled 'children' will contain how the genetically evolved points find local minima. How do the children perform compared to the parents?  Feel free to mess around with variables in the top of PROBLEM\_2\_STARTER.m that contain information about how to mutate, how long to train for, and size of population. This, however, isn't part of the exercise.
 
-\subsection{} Did the genetic algorithm seem to perform better than the random initial parents?  Please note the pros and cons of a genetic approach, considering the complexity of a problem and it’s correctness.
+
+\subsection{} Did the genetic algorithm seem to perform better than the random initial parents?  Did the genetic algorithm take a long time to run?  Reflect and observe on the pros and cons of using a genetic model here.
 
 
 \section{Neuro-Evolution}
