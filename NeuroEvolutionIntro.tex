@@ -31,11 +31,11 @@ In problem 1 we will showcase a comparison between traditional Gradient Descent 
 
 Simulated Annealing is a probabilistic machine learning technique used for solving for the global maximum/minimum for a provided function or search space. Inspiration for the technique is derived from annealing from metallurgy, thus its given name simulated annealing\cite{Nahar}. We used this methodology due to its classification as meta-heuristics and due to its functional similarities with Genetic Algorithms. Critically, we will use the non-deterministic properties, defined within a traditional simulated annealing algorithm, to showcase what a mutation within genetic algorithms seeks to achieve.
 
-The function used to calculate the acceptance probability is shown below\cite{Gnanachandran}.
+From a conceptual standpoint, you can think of a simulated annealing algorithm as an algorithm which will causes jumps in the input values based on a probabilistically model. The function used to calculate the acceptance probability is shown below\cite{Gnanachandran}.
 
 P(Acceptance) = ($1 $ if $\delta c \leq 0, e^{-\frac{\delta c }{t}} $ if $ \delta c > 0$)
 
- Please note that you are not required to understand the following formula or have any previous knowledge regarding simulated annealing or hill climbing, we are simply giving you additional information if you wish to explore further. Additionally, note that links have been provided both in the source code and the work cited if you wish to learn more about each methodology.
+Please note that you are not required to understand the formula above or have any additional knowledge regarding simulated annealing or hill climbing, we are simply giving you additional information if you wish to explore further. Additionally, note that links have been provided both in the source code and the work cited if you wish to learn more about each methodology.
 
 
 
@@ -82,13 +82,13 @@ The algorithm we demonstrate in this activity works as follows: \\
 In this section, we will use the example of an agent trapped in a grid with a nondeterministic hunter as an example of how a naive genetic algorithm using neuro-evolution can learn intelligent behaviors. The 'world' is be displayed as a matrix with the hunter represented as a 7 and the agent represented as a value between 1 and 4 inclusive. This number indicates the direction the agent is facing: 1 being to the right, 2 being down, and so on. At each frame of time, the agent is given only the distance to the nearest object or wall in front of it, and whether or not the hunter is currently 'attacking' it. The hunter always advances towards the player at each from of time with a probability corresponding to the agent can move in it's cardinal directions, turn, or strafe. Agents who avoid the hunter for the longest are selected for by the algorithm. 
 
 Unlike the previous example, the model being mutated in this case is a spiking neural network(SNN) rather than a set of gradient descent parameters. The structure of the SNN is not covered in this lesson, but knowledge of the SNN's structure is not assumed or necessary to understand the activity. The algorithm we are using is a vastly simplified version of the algorithm used in \cite{Stanley}(We do not employ crossover or keep track of 'innovation' numbers)
-\subsection{A}
+\subsection{}
 Run avoidance.m with 100, 200, 500, and 1000 epochs. Note you will need manually terminate the program when you are done observing the visualization.  What differences do you observe in the behavior of the agents with respect to the number of training epochs? Don't be alarmed if you don't see any particularly intelligent behaviors.
-\subsection{B}
+\subsection{}
 Run avoidance.m in readFromFile mode. Make sure 'bestAdj.csv', 'bestW.csv', and 'bestThresh.csv' are in the same directory. The network specified by these files was trained until it reached an average performance of 950 frames of time survived. How does the behavior of this network compare to that of the networks you trained in part A?
 
-\subsection{C}
-Next we can modify some of the simulation parameters and observe the effects on learning as well as the pre-trained network. Set speed from .2 to .4. Repeat part A and B with speed at .8. Optionally try changing the board size as well. Is there a change in the behavior of the pre-trained network? Is there a change in the behavior of the networks you are training? Hypothesize about what your observations mean when it comes to designing training simulations for neuro-evolution.
+\subsection{}
+Next we can modify some of the simulation parameters and observe the effects on learning as well as the pre-trained network. Set speed from .2 to .4. Repeat part A and B with speed at .8. Optionally try changing the board size as well. Is there a change in the behavior of the pre-trained network? Is there a change in the behavior of the networks you are training? Hypothesize about what your observations mean when it comes to designing training simulations for neuro-evolution. This question is meant to be open ended, but we provide our findings in the solution. 
 
   
 
