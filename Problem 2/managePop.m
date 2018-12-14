@@ -9,9 +9,15 @@ function population = managePop(curr, mutVector)
     %2 awards high performers more chances while limiting very low performers
     
 %% Fitness Calculation
+    trainTimes = 5;
     for i = 1:popSize
-        validationResult = validation(curr(i,:));
-        currFit = validationResult(1);
+        avgScore = 0;
+        for j = 1: trainTimes
+            validationResult = validation(curr(i,:));
+            avgScore = avgScore + validationResult;
+        end
+        
+        currFit = validationResult(1) / trainTimes;
         
         %Keep track of individual fitness as well as total.
         totalFit = totalFit + currFit;

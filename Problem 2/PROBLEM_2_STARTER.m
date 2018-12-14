@@ -9,7 +9,7 @@ t = tp(1:50);
 global y;
 y = yn(1:50);
 global duration;
-duration = 1000;
+duration = 150;
 
 %% Code for part a)
 
@@ -28,10 +28,11 @@ MUTANT_CHILDREN(2,:) = mut(CHILDREN(2,:));
 %% Code for part c)
 %MutVector format is:
 %[mutationChance, maxSpeed, maxJumpProbability, MaxJumpDistance]
-mutVector = [.05, 5,1,10];
-popSize = 20;
+mutVector = [.05, 2.5,1,10];
+popSize = 25;
 runTimes = 50;
-parents = popGen(mutVector, popSize);
+starter = popGen(mutVector, popSize);
+parents = starter;
 
 fitness = zeros(runTimes,1);
 for i = 1:runTimes
@@ -48,11 +49,49 @@ for i = 1:runTimes
     parents = managePop(parents, mutVector);
 end
 
-%Graph the parents on the graph. 
+%Graph the starters on the graph. 
+%% Starters
 figure
 subplot(2,1,1);
 plot(t,y);
-title('INSERT NAME OF PLOT');
+title(['Starter Performance with avgFitness score of ' num2str(fitness(2))]);
+xlim([0 0.05]);
+hold on;
+positionIndex = zeros(1,popSize);
+xVals = zeros(1,popSize);
+yVals = zeros(1,popSize);
+for i = 1:popSize
+    [score,positionIndex(i)] = validation(starter(i,:));
+    yVals(i) = y(positionIndex(i));
+    xVals(i) = t(positionIndex(i));
+end
+scatter(xVals, yVals);
+hold off;
+
+u1 = unique(yVals);
+psize1 = size(u1);
+xx1 = zeros(1,psize1(2)); % occurances
+x1 = zeros(1,psize1(2)); % x-axis position
+for i = 1:psize1(2)
+    for j = 1:popSize
+        if(u1(i) == yVals(j))
+            xx1(i) = xx1(i) + 1;
+            x1(i) = xVals(j);
+        end
+    end
+end
+subplot(2,1,2);
+bar(x1,xx1);
+xlim([0 0.05]);
+title('First Generation');
+colormap(jet);
+
+
+%% testing graphs
+figure
+subplot(2,1,1);
+plot(t,y);
+title(['Children Performance with avgFitness score of ' num2str(fitness(runTimes))]);
 xlim([0 0.05]);
 hold on;
 positionIndex = zeros(1,popSize);
@@ -81,7 +120,5 @@ end
 subplot(2,1,2);
 bar(x1,xx1);
 xlim([0 0.05]);
-title('INSERT NAME HERE');
+title('Last Generation');
 colormap(jet);
-
-
