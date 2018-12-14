@@ -23,10 +23,21 @@
 \section{Simulated Annealing}
 
 \subsection{}
+Possible observations:
+
+1. No, many of the points ended being stuck within the local minimums with only a small portion of the points ending up in the actual global minimum.
+2. Points got stuck within the local minimum due to the gradient descent algorithms converging to the nearest minimum and not being able to “jump out” of the given local minimum.
+
+\subsection{}
+Possible observations:
+
+1. Yes, more points reached the global minimum in contrast to the gradient descent algorithms.
+2. This is due to the mutation like property in which simulated annealing probabilistically tests other points which might be none optimal immediately .
+3. Simulated annealing algorithms effectively create possibilities of jumping out of local minimums. 
 
 \subsection{}
 
-\subsection{}
+1. A traditional gradient descent algorithm will find the immediate optimal minimum in any given situation. However, this minimum is not guaranteed to be the global minimum as gradient descent can easily get stuck in local minimums. However due to the randomized nature of mutations and simulated annealing, we are able to jump out of the local minimum and test other possible minimums.
 
 \section{Mutation and Speciation}
 
@@ -35,26 +46,23 @@
 \subsection{A}
 Possible observations: 
 
-Either none of the training runs will result in significant survival time or one or more training runs will result in signficant survival time, and will be seen to exhibit  some sort of behavior with the intent of avoiding the hunter. 
+1.none of the training runs resulted in significant survival time
+2. One or more training run resulted in signficant survival time, and can be seen to exhibit intelligent some sort of behavior with the intent of avoiding the hunter. 
 
 It's important to note that neuro-evolution is very unpredictable, and may fail to find a good solution even after a very long time. However, running a given training run for longer can only improve the performance of the network.
 
 
 \subsection{B}
- You should observe that the sample network has a very effective a deliberate style of avoiding the hunter. All successful SSNs we have trained have employed a variant of this style. It's important to note that while is no upper bound on how long it takes to train a network to this quality and we could not leave it's generation as an exercise, it is possible to train a network to this quality in even 1000 or fewer epochs. 
+ You should observe that the sample network has a very effective a deliberate style of avoiding the hunter. All successful SSNs we have trained have employed a variant of this style. It's important to note that while is no upper bound on how long it takes to train a network to this quality and we could not leave it's generation as an excercise, it is possible to train a network to this quality in even 1000 or fewer epochs. 
 
 
 \subsection{C}
 
 Possible Obervations:
 
-Either increasing the speed will result in no significant improvement over the baseline(if the baseline fails to learn the task effectively) or will result in a dramatic decrease from the baseline.
-
-The premade network will still perform reasonably.
-
-This illustrates that when designing a training instance, it is generally desirable to reduce the difficulty of the task for early training, and then gradually increase difficulty as score increases.
 
 
+\section{Works Cited}
 
 
 
