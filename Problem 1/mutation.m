@@ -1,4 +1,5 @@
 %% Generating Simulation Enviorment
+clear all
 close all
 tp = (0:0.001:1)';
 yp = sin(2*pi*50*tp) + 2*sin(2*pi*120*tp);
