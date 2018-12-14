@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6300 64-bit) (preloaded format=pdflatex 2017.9.16)  13 DEC 2018 22:45
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6300 64-bit) (preloaded format=pdflatex 2017.9.16)  13 DEC 2018 23:12
 entering extended mode
 **./NeuroEvolutionIntro.tex
 (NeuroEvolutionIntro.tex
@@ -245,34 +245,34 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 18.
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no ™ in font cmr10!
- [1
-
-{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 50--51
+Underfull \hbox (badness 10000) in paragraph at lines 21--24
 
  []
 
-[2]
 Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no ™ in font cmr10!
- [3]
-Underfull \hbox (badness 10000) in paragraph at lines 73--81
+[1
+
+{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
+Underfull \hbox (badness 10000) in paragraph at lines 52--53
+
+ []
+
+[2] [3]
+Underfull \hbox (badness 10000) in paragraph at lines 76--84
 
  []
 
 [4] (NeuroEvolutionIntro.bbl) [5] (NeuroEvolutionIntro.aux) ) 
 Here is how much of TeX's memory you used:
- 2818 strings out of 493320
- 39964 string characters out of 3138960
- 101786 words of memory out of 3000000
- 6311 multiletter control sequences out of 15000+200000
+ 2819 strings out of 493320
+ 39971 string characters out of 3138960
+ 101789 words of memory out of 3000000
+ 6312 multiletter control sequences out of 15000+200000
  11849 words of font info for 46 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 39i,6n,25p,1354b,193s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 39i,6n,25p,1331b,193s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Program Files/
 MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Program Files/MiKTeX 2
 .9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files/MiKTeX 2.9/fonts
@@ -283,7 +283,7 @@ cmr12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb
 ><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Pro
 gram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Program File
 s/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on NeuroEvolutionIntro.pdf (5 pages, 126128 bytes).
+Output written on NeuroEvolutionIntro.pdf (5 pages, 131003 bytes).
 PDF statistics:
  58 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
