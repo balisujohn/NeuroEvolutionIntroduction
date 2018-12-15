@@ -8,7 +8,7 @@ maxJumpChance = 1; %Between 0 and 1 as it is a probability
 maxJumpDistance = 10; %50 is MAX possible
 mutateVector = [chanceToMutate,maxSpeed, maxJumpChance, maxJumpDistance];
 
-epochs = 30;
+epochs = 100;
 populationSize = 30;
 
 
